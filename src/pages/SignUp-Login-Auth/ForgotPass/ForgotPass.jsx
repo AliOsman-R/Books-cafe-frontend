@@ -1,13 +1,12 @@
 import React from 'react'
-import { Container, PrimaryInput } from '../../components/inputs'
-import { PrimaryButton, linkStyle } from '../../components/buttons'
-import secondaryImage from "../../assets/secondary-image.jpg";
 import { useState } from 'react'
-import { httpRequest } from '../../utils/httpsRequest'
 import { toast } from 'sonner'
 import { Link, useNavigate } from 'react-router-dom'
-import { BtnLoader } from '../../components/LoaderSpinner';
-import AuthCard from '../../components/AuthCard';
+import { Container, PrimaryInput } from '../../../components/inputs'
+import { PrimaryButton, linkStyle } from '../../../components/buttons'
+import { BtnLoader } from '../../../components/LoaderSpinner'
+import { httpRequest } from '../../../utils/httpsRequest'
+import AuthCard from '../../../components/AuthCard'
 
 const ForgotPass = () => {
     const [email, setEmail] = useState('')
@@ -44,7 +43,7 @@ const text = 'Please enter your email address that you used when you signed up f
             <Container labelName="Email">
                 <PrimaryInput required value={email} onChange={(e)=> setEmail(e.target.value)} name="email" type='email' placeholder='example@gmail.com'/>
             </Container>
-            <PrimaryButton className='w-full' disabled={btnLoading} type="submit" onClick={handleSubmit}>
+            <PrimaryButton className='w-full h-[48px]' disabled={btnLoading} type="submit" onClick={handleSubmit}>
                 {btnLoading? <BtnLoader/> : 'Request reset link'}
             </PrimaryButton>
         </form>

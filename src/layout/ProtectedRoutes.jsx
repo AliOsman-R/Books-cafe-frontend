@@ -4,12 +4,8 @@ import { Navigate, useLocation } from 'react-router-dom'
 
 const ProtectedRoutes = ({ children }) => {
     
-    const { user, isAuth } = useContext(Context)
+    const { isAuth } = useContext(Context)
     const location = useLocation()
-
-    console.log(isAuth)
-
-    console.log(location.pathname.includes('auth'))
 
     if(isAuth && location.pathname.includes('auth'))
     {

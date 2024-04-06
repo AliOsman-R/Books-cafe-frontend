@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
-import { Container, PrimaryInput } from '../../components/inputs'
-import { PrimaryButton } from '../../components/buttons'
-import { httpRequest } from '../../utils/httpsRequest'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { validatePassword } from '../../utils/validation';
-import { AppLoader, BtnLoader } from '../../components/LoaderSpinner'
 import { toast } from 'sonner'
+import { httpRequest } from '../../../utils/httpsRequest'
+import { AppLoader, BtnLoader } from '../../../components/LoaderSpinner'
+import { Container, PrimaryInput } from '../../../components/inputs'
+import { PrimaryButton } from '../../../components/buttons'
+import { validatePassword } from '../../../utils/validation'
 
 const ResetPass = () => {
     const [validUrl, setValidUrl] = useState(false);
@@ -73,7 +73,7 @@ const ResetPass = () => {
                       <Container labelName="Confirm Password">
                           <PrimaryInput required onChange={(e)=> setConfPass(e.target.value)} type='password' placeholder='********'/>
                       </Container>
-                      <PrimaryButton disabled={btnLoading} onClick={handleSubmit}>
+                      <PrimaryButton className='h-[48px]' disabled={btnLoading} onClick={handleSubmit}>
                         {btnLoading? <BtnLoader/> : 'Reset'} 
                       </PrimaryButton>
                     </form>

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { httpRequest } from '../utils/httpsRequest';
 import { Link, useParams } from 'react-router-dom';
-import success from '../assets/success.png';
 import { toast } from 'sonner';
-import { AppLoader } from '../components/LoaderSpinner';
 import { LuCheckCircle } from "react-icons/lu";
-import { PrimaryButton } from '../components/buttons';
+import { AppLoader } from '../../components/LoaderSpinner';
+import { PrimaryButton } from '../../components/buttons';
+import { httpRequest } from '../../utils/httpsRequest';
 
 const VerifyEmail = () => {
     const [validUrl, setValidUrl] = useState(false);

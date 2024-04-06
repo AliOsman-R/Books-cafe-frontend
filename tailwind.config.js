@@ -21,6 +21,7 @@ module.exports = {
       },
       screens:{
         ssm:'360px',
+        xl:'1217px'
       },
 
       colors:{
@@ -35,7 +36,8 @@ module.exports = {
   plugins: [],
 }
 
-
+//f59e0b 5c3b28 704214
 //cd8c42
 //e49b49
+//bg-[#172133]
 //cd8c42

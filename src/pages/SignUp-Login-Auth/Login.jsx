@@ -29,7 +29,7 @@ const Login = () => {
         toast.success("Logged in successfully")
         actions({ type: 'SET_IS_AUTH', payload: true })
         actions({ type: 'SET_USER', payload: data.user })
-        navigate('/user/profile/account')
+        navigate('/user/profile/manage-user/user-account')
       })
       .catch(err => {
         toast.error(err?.response?.data.message)
@@ -38,11 +38,8 @@ const Login = () => {
       .finally(() => setBtnLoading(false))
   };
 
-  const text = 'Login to access your account'
-
-
   return (
-      <AuthCard title={'Login'} text={text} classTextTwo={'max-h-[500px]'}>
+      <AuthCard title={'Login'} text={'Login to access your account'} classTextTwo={'max-h-[500px]'}>
         <form onSubmit={handleSubmit} className='ssm:p-3 lg:p-8 space-y-4'>
           <Container labelName="Email">
               <PrimaryInput required value={loginInfo.email} onChange={handleChange} name="email" type="email" placeholder="example@gmail.com" />
@@ -50,7 +47,7 @@ const Login = () => {
           <Container labelName="Password">
               <PrimaryInput required value={loginInfo.password} onChange={handleChange} name="password" type="password" placeholder="**************" />
           </Container>
-          <PrimaryButton className='w-full' disabled={btnLoading} type="submit">{btnLoading? <BtnLoader/> : 'Login'}</PrimaryButton>
+          <PrimaryButton className='w-full h-[48px]' disabled={btnLoading} type="submit">{btnLoading? <BtnLoader/> : 'Login'}</PrimaryButton>
         </form>
         <div className="text-center mt-4">
           <p className="text-gray-600">Need an account? 
