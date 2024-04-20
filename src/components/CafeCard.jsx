@@ -5,6 +5,7 @@ import defaultCafeImage from '../assets/default-cafe-image.jpg';
 import defaultUserImage from '../assets/default-user-image.jpg';
 import { linkBtnStyle } from './buttons';
 import { getDayInfo } from '../utils/AppUtils';
+import StarRating from './StarRating';
 
 const CafeCard = ({ cafe }) => {
   const dayInfo = getDayInfo(cafe.workingDays);
@@ -22,8 +23,8 @@ const CafeCard = ({ cafe }) => {
   console.log(cafe.workingDays)
 
   return (
-    <div className="max-w-sm h-[540px] rounded-lg overflow-hidden shadow-lg bg-white">
-        <img className="w-full min-w-[384px] h-64 object-cover object-center" src={image || defaultCafeImage} alt={name} />
+    <div className="max-w-[370px] md:h-[535px] ssm:h-[555px] rounded-lg overflow-hidden shadow-lg bg-white">
+        <img className="ssm:w-full md:min-w-[370px]  h-64 object-cover object-center" src={image || defaultCafeImage} alt={name} />
         <div className="px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
@@ -34,24 +35,19 @@ const CafeCard = ({ cafe }) => {
               </div>
             </div>
             <div className="flex items-center">
-              <BsStarFill className="text-yellow-400" />
-              <BsStarFill className="text-yellow-400" />
-              <BsStarFill className="text-yellow-400" />
-              <BsStarFill className="text-yellow-400" />
-              <BsStarHalf className="text-yellow-400" />
-              <span className="ml-1 text-gray-600">{rating}</span>
+              <StarRating rating={cafe.averageRating} />
             </div>
           </div>
           <div className="mt-4">
             <h2 className="text-xl font-semibold text-gray-800">{name}</h2>
             <p className="mt-2 text-gray-600 overflow-hidden w-full h-[50px]">{bio}</p>
           </div>
-          <div className='flex justify-between'>
-            <strong className={`${dayInfo.status === 'Open'? 'text-green-400' : 'text-red-400'}`}>{dayInfo.status} </strong>
-            <span>{dayInfo.status === 'Open' && 'Working Hours: ' + dayInfo.workingHours}</span>
+          <div className='flex mt-2 justify-between ssm:flex-col md:flex-row'>
+            <strong className={`${dayInfo.status === 'Open'? 'text-green-500' : 'text-red-500'}`}>{dayInfo.status} </strong>
+            <span className='text-green-500 font-semibold'>{dayInfo.status === 'Open' && 'Working Hours: ' + dayInfo.workingHours}</span>
           </div>
         </div>
-      <div className="px-6 py-4">
+      <div className="px-6 py-2">
          <Link to={`/cafes/${_id}`} className={`${linkBtnStyle} `}>
             View Cafe
           </Link>

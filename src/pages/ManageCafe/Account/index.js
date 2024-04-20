@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import InfoCard from '../../../components/InfoCard'
 import { Container } from '../../../components/inputs'
-import { cafeInitialState } from '../../../data/data'
+import { cafeInitialState } from '../../../data/initialStates'
 import { PrimaryButton } from '../../../components/buttons'
 import { AppLoader, BtnLoader } from '../../../components/LoaderSpinner'
 import { validTypes, validateMalaysianPhoneNumber } from "../../../utils/validation";
@@ -10,8 +10,8 @@ import { httpRequest } from '../../../utils/httpsRequest'
 import { Context } from '../../../context/GlobalContext'
 import ImageContainer from '../../../components/ImageContainer'
 import CafeForm from './CafeForm'
-import { isAnyFieldEmpty, isCafeInfoChanged } from '../../../utils/AppUtils'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { isAnyFieldEmpty, isCafeInfoChanged } from '../../../utils/formUtils'
+import { useNavigate } from 'react-router-dom'
 
 const CafeProfile = () => {
     const [workingDays, setWorkingDays] = useState([]);
@@ -66,10 +66,9 @@ const CafeProfile = () => {
         }
     }
 
-
     const handleUpdateImage = async (changedCafeImage) => {
         try{
-            const {data} = await httpRequest.put(`/image/${cafeInfo._id}`, changedCafeImage)
+            const {data} = await httpRequest.put(`/image/${cafeInfo.imageId}`, changedCafeImage)
             return data.image
         }
         catch(err) {

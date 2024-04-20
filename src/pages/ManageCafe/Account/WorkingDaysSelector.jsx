@@ -3,6 +3,7 @@ import { ToggleSwitch } from '../../../components/ToggleSwitch ';
 import { v4 as uuidv4 } from 'uuid';
 import { PrimaryButton } from '../../../components/buttons';
 import { toast } from 'sonner';
+import { compareTimes, sortWorkingDays } from '../../../utils/AppUtils';
 
 const WorkingDaysSelector = ({workingDays, setWorkingDays}) => {
   const [newDay, setNewDay] = useState({
@@ -38,12 +39,6 @@ const WorkingDaysSelector = ({workingDays, setWorkingDays}) => {
       setWorkingDays(updatedDays);
     }
     setNewDay({ id: null, day: '', startTime: '', endTime: '', isOpen: false });
-  };
-  
-  const compareTimes = (startTime, endTime) => {
-    const start = new Date(`1970-01-01T${startTime}`);
-    const end = new Date(`1970-01-01T${endTime}`);
-    return start < end;
   };
 
   const handleEditDay = (id) => {
@@ -105,7 +100,7 @@ const WorkingDaysSelector = ({workingDays, setWorkingDays}) => {
         </PrimaryButton>
       </div>
       <div className="grid gap-2">
-        {workingDays.map((day, index) => (
+        {sortWorkingDays(workingDays).map((day, index) => (
           <div
             key={day.id}
             className="flex items-center bg-gray-100 rounded p-4 border-l-4 border-primaryColor"

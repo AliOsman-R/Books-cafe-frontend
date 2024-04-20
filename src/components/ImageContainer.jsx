@@ -12,7 +12,6 @@ const ImageContainer = ({handleChange, imgName , setData, data, height}) => {
             fileInputRef.current.value = "";
         }
       };
-      console.log(data[imgName])
   return (
     <>
         <label className="flex flex-col gap-2 mb-2" htmlFor="file-upload">

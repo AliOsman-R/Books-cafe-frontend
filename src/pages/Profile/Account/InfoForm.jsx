@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Context } from '../../../context/GlobalContext';
 import { Container, PrimaryInput, phoneInputStyle } from '../../../components/inputs';
 import InfoCard from '../../../components/InfoCard';
-import {userInitialState} from '../../../data/data'
+import {userInitialState} from '../../../data/initialStates'
 import { PrimaryButton } from '../../../components/buttons';
 import 'react-phone-input-2/lib/bootstrap.css'
 import { BtnLoader } from '../../../components/LoaderSpinner';
@@ -11,7 +11,7 @@ import { validTypes, validateMalaysianPhoneNumber } from '../../../utils/validat
 import { httpRequest } from '../../../utils/httpsRequest';
 import PhoneInput from 'react-phone-input-2';
 import ImageContainer from '../../../components/ImageContainer';
-import { isUserInfoChanged } from '../../../utils/AppUtils';
+import { isUserInfoChanged } from '../../../utils/formUtils';
 
 
 const InfoForm = () => {
@@ -19,6 +19,7 @@ const InfoForm = () => {
       const [originalUserInfo, setOriginalUserInfo] = useState(userInitialState);
       const [btnLoading, setBtnLoading] = useState(false);
       const { user, actions } = useContext(Context);
+      console.log(user)
     
       useEffect(() => {
         if (user) setUserInfo({ ...userInfo, ...user });
@@ -51,7 +52,7 @@ const InfoForm = () => {
 
       const handleUpdateImage = async (changedUserImage) => {
         try{
-          const {data} = await httpRequest.put(`/image/${user._id}`, changedUserImage)
+          const {data} = await httpRequest.put(`/image/${user.imageId}`, changedUserImage)
           return data.image
         }
         catch(err) {

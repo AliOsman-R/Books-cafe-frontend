@@ -3,12 +3,12 @@ import Modal from "../../../components/Modal";
 import { PrimaryButton } from "../../../components/buttons";
 import { BtnLoader } from "../../../components/LoaderSpinner";
 import { validateMalaysianPhoneNumber } from "../../../utils/validation";
-import { isAllChanged, isPartChanged } from "../../../utils/AppUtils";
+import { isAllChanged, isAnyFieldEmpty, isPartChanged, trimFormData } from "../../../utils/formUtils";
 import { toast } from "sonner";
 import { httpRequest } from "../../../utils/httpsRequest";
 import { Context } from "../../../context/GlobalContext";
 import CafeForm from "./CafeForm";
-import { cafeInitialState } from "../../../data/data";
+import { cafeInitialState } from "../../../data/initialStates";
 
 const CafeSwitch = ({ setOpenModal, openModal }) => {
   const [workingDays, setWorkingDays] = useState([]);
@@ -16,8 +16,8 @@ const CafeSwitch = ({ setOpenModal, openModal }) => {
   const [btnLoading, setBtnLoading] = useState(false);
   const {user, actions} = useContext(Context)
 
-  const isCafeInfoChanged = () => {
-    return isAllChanged(cafeInfo)
+  const isCafeInfoEmpty = () => {
+    return isAnyFieldEmpty(cafeInfo)
   }
 
   const isInfoChanged = () => {
@@ -34,11 +34,7 @@ const CafeSwitch = ({ setOpenModal, openModal }) => {
     if(!validateMalaysianPhoneNumber(cafeInfo.phoneNumber))
       return toast.error("Phone number is invalid (E.g., 60123456789, 0123456789)")
 
-      const cafeInfoTrimmed = Object.entries(cafeInfo).reduce((acc, [key, value]) => {
-        acc[key] = value.trim();
-        console.log(acc)
-        return acc;
-      }, {});
+      const cafeInfoTrimmed = trimFormData(cafeInfo)
 
       setBtnLoading(true)
       httpRequest.post(`/cafe/${user._id}`,{...cafeInfoTrimmed,workingDays})
@@ -75,7 +71,7 @@ const CafeSwitch = ({ setOpenModal, openModal }) => {
             <PrimaryButton disabled={btnLoading || !isInfoChanged()} onClick={handleReset} className="h-[30px]">
               Reset
             </PrimaryButton>
-            <PrimaryButton disabled={btnLoading || !isCafeInfoChanged()} onClick={handleSwitch} className="h-[30px] min-w-[117px]">
+            <PrimaryButton disabled={btnLoading || isCafeInfoEmpty()} onClick={handleSwitch} className="h-[30px] min-w-[117px]">
               {btnLoading ? <BtnLoader /> : "Switch"}
             </PrimaryButton>
           </div>

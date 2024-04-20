@@ -5,17 +5,19 @@ import { v4 as uuidv4 } from "uuid";
 import { httpRequest } from "../utils/httpsRequest";
 import { AppLoader } from "../components/LoaderSpinner";
 import CafeCard from "../components/CafeCard";
+import { CgUnavailable } from "react-icons/cg";
 
 const linkStyle =
   "min-w-[140px] h-[60px] bg-secondaryColor font-bold text-[16px] hover:bg-secondaryColorHover rounded-lg flex items-center justify-center";
 
 const Home = () => {
   const [pageLoading, setPageLoading] = useState(true);
-  const [filteredCafes, setFilteredCafes] = useState([]);
+  const [sortedCafes, setSortedCafes] = useState([]);
   const storesRef = useRef(null);
   const titleRef = useRef(null);
   const whyChooseRef = useRef(null);
   const homeImage = useRef(null);
+  const isData = sortedCafes.length > 0;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -25,7 +27,7 @@ const Home = () => {
       const cafes = data.cafes
       cafes.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       
-      setFilteredCafes(cafes.slice(0, 3));
+      setSortedCafes(cafes.slice(0, 3));
     })
     .catch((err) => {
       console.log(err)
@@ -48,7 +50,7 @@ const Home = () => {
 
     observer.observe(titleRef.current);
     observer.observe(whyChooseRef.current);
-    if(filteredCafes.length>0)
+    if(sortedCafes.length>0)
     {
       observer.observe(storesRef.current);
     }
@@ -57,7 +59,7 @@ const Home = () => {
     return () => {
       observer.disconnect();
     };
-  }, [filteredCafes]);
+  }, [sortedCafes]);
 
   return (
     <div className="flex flex-col mt-0 ">
@@ -110,13 +112,24 @@ const Home = () => {
             className="flex flex-wrap ssm:px-2 items-center justify-center gap-4 post"
             ref={storesRef}
           >
-            {filteredCafes.map(
+            {isData && sortedCafes.map(
               (cafe) => (
                 <CafeCard
                   key={uuidv4()}
                   cafe={cafe}
                   />
               )
+              )}
+              {!isData && (
+                <div className="flex flex-col justify-center items-center mt-[250px]">
+                  <h1 className="text-[40px] font-semibold text-gray-400">
+                    We are sorry
+                  </h1>
+                  <h1 className="text-[40px] font-semibold text-gray-400 flex gap-2 items-center">
+                    No Cafes Available{" "}
+                    <CgUnavailable size={50} className="text-gray-400" />
+                  </h1>
+                </div>
               )}
           </div>
             )

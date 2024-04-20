@@ -1,81 +1,21 @@
 export const setPagination = (recordsPerPage, currentPage, data) => {
-    // const recordsPerPage = 10;
     const lastIndex = currentPage * recordsPerPage
     const firstIndex = lastIndex - recordsPerPage
     const records = data.slice(firstIndex, lastIndex)
     return records;
 }
 
-export const isAllChanged = (data) => {
-    return Object.values(data).every(val => val?.trim() !== '')
-  }
-  
-  
-export const isPartChanged = (data) => {
-  return Object.values(data).some(val => val?.trim() !== '')
-}
-
-
-export const isCafeInfoChanged = (cafeInfo, originalCafeInfo, workingDays) => {
-  return (
-      cafeInfo.name.trim() !== originalCafeInfo.name ||
-      cafeInfo.bio.trim() !== originalCafeInfo.bio ||
-      cafeInfo.phoneNumber.trim() !== originalCafeInfo.phoneNumber ||
-      cafeInfo.state.trim() !== originalCafeInfo.state ||
-      cafeInfo.city.trim() !== originalCafeInfo.city ||
-      cafeInfo.address.trim() !== originalCafeInfo.address ||
-      cafeInfo.image !== originalCafeInfo.image ||
-      cafeInfo.latitude !== originalCafeInfo.latitude ||
-      cafeInfo.longitude !== originalCafeInfo.longitude ||
-      !areWorkingDaysEqual(workingDays, originalCafeInfo.workingDays)
-  );
-  };
-
-  const areWorkingDaysEqual = (workingDays1, workingDays2) => {
-      if (workingDays1.length !== workingDays2.length) {
-          return false;
-      }
-      for (let i = 0; i < workingDays1.length; i++) {
-          if (workingDays1[i].day !== workingDays2[i].day ||
-              workingDays1[i].startTime !== workingDays2[i].startTime ||
-              workingDays1[i].endTime !== workingDays2[i].endTime ||
-              workingDays1[i].isOpen !== workingDays2[i].isOpen) {
-              return false;
-          }
-      }
-      return true;
-  };
-
-
-export const isUserInfoChanged = (userInfo, originalUserInfo) => {
-    return (
-      userInfo.name.trim() !== originalUserInfo.name ||
-      userInfo.email.trim() !== originalUserInfo.email ||
-      userInfo.phoneNumber !== originalUserInfo.phoneNumber ||
-      userInfo.firstAddress.trim() !== originalUserInfo.firstAddress ||
-      userInfo.secondAddress.trim() !== originalUserInfo.secondAddress ||
-      userInfo.profileImage !== originalUserInfo.profileImage
-    );
-  };
-
-
-export const isAnyFieldEmpty = (state) => {
-    // Obtain all values from the state object
-    const values = Object.values(state);
-  
-    // Check if any value is an empty string
-    for (let value of values) {
-      if (value?.trim() === '') {
-        return true; // Return true if any field is empty
-      }
-    }
-  
-    // If none are empty, return false
-    return false;
-  };
-
+export const compareTimes = (startTime, endTime) => {
+  const start = new Date(`1970-01-01T${startTime}`);
+  const end = new Date(`1970-01-01T${endTime}`);
+  return start < end;
+};
 
 export const getDayInfo = (openingHours) => {
+  if(openingHours.length === 0)
+  {
+    return { status: "Closed", workingHours: "N/A"}
+  }
   // Get the current day
   const currentDate = new Date();
   const currentDay = currentDate.toLocaleDateString('en-US', { weekday: 'long' });
@@ -90,21 +30,21 @@ export const getDayInfo = (openingHours) => {
     const endTime = parseTime(todayOpeningHours.endTime);
 
     // Get the current time
-    const currentTime = {
-      hours: currentDate.getHours(),
-      minutes: currentDate.getMinutes()
-    };
+    // const currentTime = {
+    //   hours: currentDate.getHours(),
+    //   minutes: currentDate.getMinutes()
+    // };
 
-    // Check if the current time is within the working hours
-    const isOpen = isTimeBetween(currentTime, startTime, endTime);
+    // // Check if the current time is within the working hours
+    // const isOpen = isTimeBetween(currentTime, startTime, endTime);
 
-    // Convert start and end times to AM/PM format
+    // // Convert start and end times to AM/PM format
     const formattedStartTime = formatTime(todayOpeningHours.startTime);
     const formattedEndTime = formatTime(todayOpeningHours.endTime);
 
     // Return the status and working hours
     return {
-      status: isOpen ? "Open" : "Closed",
+      status: todayOpeningHours.isOpen ? "Open" : "Closed",
       workingHours: `${formattedStartTime} - ${formattedEndTime}`
     };
   } else {
@@ -140,3 +80,79 @@ const formatTime = (time) => {
   const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
   return `${formattedHour}:${minutes} ${ampm}`;
 };
+
+
+export const sortWorkingDays = (workingDays) => {
+  const daysMap = {
+    Monday: 1,
+    Tuesday: 2,
+    Wednesday: 3,
+    Thursday: 4,
+    Friday: 5,
+    Saturday: 6,
+    Sunday: 7
+  };
+
+  // Sort the array based on the order of days from Monday to Sunday
+  workingDays.sort((a, b) => {
+    return daysMap[a.day] - daysMap[b.day];
+  });
+
+  return workingDays;
+};
+
+
+const getEventDateTime = (eventDate, eventTime) => {
+  const [hours, minutes] = eventTime.split(':').map(part => parseInt(part));
+
+    // Set default modifier to AM if hours < 12, otherwise set to PM
+    const modifier = hours < 12 ? 'AM' : 'PM';
+
+    // Calculate the actual hours in 24-hour format
+    const actualHours = (hours % 12) + (modifier === 'PM' ? 12 : 0);
+
+    // Create a new Date object with the provided date and time
+    const date = new Date(eventDate);
+    date.setHours(actualHours, minutes, 0); // Set seconds to zero
+
+    return date;
+};
+
+export const calculateTimeLeft = (eventDate, startTime, endTime) => {
+  const eventStart = getEventDateTime(eventDate, startTime);
+  const eventEnd = getEventDateTime(eventDate, endTime);
+  const now = new Date();
+
+  if (now > eventEnd) {
+    return { over: true };
+  } else if (now > eventStart) {
+    return { happening: true };
+  } else {
+    const difference = eventStart - now;
+    return {
+      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+      minutes: Math.floor((difference / 1000 / 60) % 60),
+      seconds: Math.floor((difference / 1000) % 60),
+    };
+  }
+};
+
+
+export const getUniqueAttributes = (items, attributeName) => {
+  // Use a Set to store unique attributes
+  const uniqueAttributes = new Set();
+
+  // Loop through each menu item
+  items.forEach(item => {
+      const attributeValue = item[attributeName];
+      if (attributeValue && typeof attributeValue === 'string') {
+          // Format the attribute: capitalize the first letter, lowercase the rest
+          const formattedAttribute = attributeValue.charAt(0).toUpperCase() + attributeValue.slice(1).toLowerCase();
+          uniqueAttributes.add(formattedAttribute);
+      }
+  });
+
+  // Convert the Set back to an array
+  return Array.from(uniqueAttributes);
+}

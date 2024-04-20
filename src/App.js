@@ -24,6 +24,7 @@ import Cart from "./pages/Cart";
 import Cafes from "./pages/Cafes";
 import Cafe from "./pages/Cafe/index";
 import CafeAccount from "./pages/ManageCafe/Account/index";
+import CafeList from "./pages/ManageCafe/List/index";
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
                 </Route>
                 <Route path="manage-cafe">
                   <Route path="cafe-account" element={<CafeAccount />} />
+                  <Route path="cafe-list" element={<CafeList />} />
                 </Route>
               </Route>
             </Route>

@@ -49,8 +49,6 @@ useEffect(() => {
  }
 }, [recordsPerPage])
 
-console.log(numberOfPages,currentPage)
-
   return (
     <div className="flex gap-3 items-center">
        <select

@@ -9,6 +9,7 @@ import Search from "../components/Search";
 import { httpRequest } from "../utils/httpsRequest";
 import { AppLoader } from "../components/LoaderSpinner";
 import CafeCard from "../components/CafeCard";
+import Filter from "../components/Filter";
 
 const Cafes = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,6 +31,18 @@ const Cafes = () => {
     })
     .finally(()=> {setPageLoading(false)})
   }, [])
+
+  const handleSearch = (e, setSearchQuery) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    const filteredData = cafes.filter(cafe =>
+        cafe.name.toLowerCase().includes(query.toLowerCase()) ||
+        cafe.ownerName.toLowerCase().includes(query.toLowerCase())||
+        cafe.state.toLowerCase().includes(query.toLowerCase()) ||
+        cafe.city.toLowerCase().includes(query.toLowerCase()) 
+    );
+    setFilteredCafes(filteredData);
+  };
   
 
   if(pageLoading)  {
@@ -42,7 +55,7 @@ const Cafes = () => {
 
   return (
     <div className="py-5 pb-10">
-      <div className="flex justify-between items-center mx-10 py-6 border-b border-gray-300">
+      <div className="flex justify-between ssm:flex-col md:flex-row items-center mx-10 py-6 border-b border-gray-300">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">
             Welcome to Your Cafes Oasis
@@ -50,13 +63,16 @@ const Cafes = () => {
           <p className="text-gray-500">Explore the Best Cafes Near You</p>
         </div>
         <div className="flex items-center gap-5">
-          <Search data={cafes} setFilteredData={setFilteredCafes} />
-          <button className="flex items-center justify-center w-12 h-12 rounded-full bg-secondaryColor text-black hover:bg-secondaryColorHover transition duration-300">
+          <Search handleSearch={handleSearch} />
+          {/* <button className="flex items-center justify-center w-12 h-12 rounded-full bg-secondaryColor text-black hover:bg-secondaryColorHover transition duration-300">
             <RiFilter3Fill size={24} />
-          </button>
+          </button> */}
         </div>
       </div>
       <div className="flex flex-grow">
+        <div className="ssm:hidden md:flex">
+          <Filter/>
+        </div>
       <div className={`flex-1 flex flex-wrap gap-8 justify-center md:items-start p-4 min-h-[905px]`}>
         {isData &&
           setPagination(recordsPerPage, currentPage, filteredCafes)?.map(
@@ -78,9 +94,6 @@ const Cafes = () => {
             </h1>
           </div>
         )}
-      </div>
-      <div className="bg-white w-[350px]">
-        filter
       </div>
       </div>
       <div className="flex justify-center items-center space-x-2 my-4">

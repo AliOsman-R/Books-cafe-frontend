@@ -22,7 +22,7 @@ const PageAnimationStyle = styled.div`
   width: 100%;
   height: 100%;
   background-color: white;
-  animation: ${slideInOut} 0.6s ease-in-out;
+  animation: ${slideInOut} 0.4s ease-in-out;
   z-index: 1100;
   overflow-y: auto;
 `
@@ -30,8 +30,20 @@ const PageAnimationStyle = styled.div`
 const PageButton = styled.span`
   position:absolute;
   z-index:1000;
+  right:0;
+  padding:8px 15px;
+  margin:5px;
   color:white;
+  font-weight:bold;
   cursor:pointer;
+  border-radius:100px;
+  background-color: black;
+  border: 3px solid red; 
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  &:hover {
+    background-color: red; 
+    color: #ffffff;
+  }
 `
 const PageContent = styled.div`
   background-color: var(--primary-color);
@@ -53,7 +65,7 @@ function PageAnimation({ children }) {
     <PageAnimationStyle >
       {/* <Header/> */}
       {/* <PageContent> */}
-      <PageButton onClick={() => navigate(-1)}><MdOutlineArrowBack size={35} /></PageButton>
+      <PageButton onClick={() => navigate(-1)}>X</PageButton>
       {/* </PageContent> */}
       {children}
     </PageAnimationStyle>
