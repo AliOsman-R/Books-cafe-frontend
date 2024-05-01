@@ -3,8 +3,8 @@ import { Container, PrimaryInput, TextareaInput, inputStyle } from '../../../../
 import { toast } from 'sonner';
 import ImagesUploader from '../../../../components/ImagesUploader';
 
-const BookForm = ({bookData, setBookData}) => {
-    const isForSelling = bookData.availability === 'Selling'
+const BookForm = ({formData, setFormData}) => {
+    const isForSelling = formData.availability === 'Selling'
 
     const handleChange = (e) => {
         const { name, value, type } = e.target;
@@ -20,7 +20,7 @@ const BookForm = ({bookData, setBookData}) => {
             formattedValue = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
         } 
     
-        setBookData(prev => ({
+        setFormData(prev => ({
             ...prev,
             [name]: formattedValue
         }));
@@ -35,7 +35,7 @@ const BookForm = ({bookData, setBookData}) => {
                         name="title"
                         className="mt-1 p-2 block w-full border"
                         placeholder="Enter title"
-                        value={bookData.title}
+                        value={formData.title}
                         onChange={handleChange}
                         required
                     />
@@ -46,7 +46,7 @@ const BookForm = ({bookData, setBookData}) => {
                         name="author"
                         placeholder="Enter author"
                         className="mt-1 block w-full appearance-none bg-white border border-gray-300 hover:border-gray-500 py-2 px-3 rounded-lg shadow-sm text-sm leading-tight focus:outline-none focus:shadow-outline"
-                        value={bookData.author}
+                        value={formData.author}
                         onChange={handleChange}
                         required
                     />
@@ -57,7 +57,7 @@ const BookForm = ({bookData, setBookData}) => {
                         name="genre"
                         placeholder="Enter genre"
                         className="mt-1 block w-full appearance-none bg-white border border-gray-300 hover:border-gray-500 py-2 px-3 rounded-lg shadow-sm text-sm leading-tight focus:outline-none focus:shadow-outline"
-                        value={bookData.genre}
+                        value={formData.genre}
                         onChange={handleChange}
                         required
                     />
@@ -66,7 +66,7 @@ const BookForm = ({bookData, setBookData}) => {
                     <select
                         name="availability"
                         className={inputStyle}
-                        value={bookData.availability}
+                        value={formData.availability}
                         onChange={handleChange}
                         required
                     >
@@ -78,7 +78,7 @@ const BookForm = ({bookData, setBookData}) => {
                     <select
                         name="status"
                         className={inputStyle}
-                        value={bookData.status}
+                        value={formData.status}
                         onChange={handleChange}
                         required
                     >
@@ -93,9 +93,9 @@ const BookForm = ({bookData, setBookData}) => {
                         min={0}
                         placeholder="Enter price"
                         className="mt-1 block w-full appearance-none bg-white border border-gray-300 hover:border-gray-500 py-2 px-3 rounded-lg shadow-sm text-sm leading-tight focus:outline-none focus:shadow-outline"
-                        value={bookData.price}
+                        value={formData.price}
                         onChange={handleChange}
-                        required={bookData.availability === 'selling'}
+                        required={formData.availability === 'selling'}
                     />
                 </Container>}
                 <Container labelName='Description'>
@@ -103,7 +103,7 @@ const BookForm = ({bookData, setBookData}) => {
                         name="description"
                         placeholder="Enter description"
                         className="mt-1 block w-full appearance-none bg-white border border-gray-300 hover:border-gray-500 py-2 px-3 rounded-lg shadow-sm text-sm leading-tight focus:outline-none focus:shadow-outline"
-                        value={bookData.description}
+                        value={formData.description}
                         onChange={handleChange}
                         required
                     />
@@ -115,9 +115,9 @@ const BookForm = ({bookData, setBookData}) => {
                         min={0}
                         placeholder="Enter stock"
                         className="mt-1 block w-full appearance-none bg-white border border-gray-300 hover:border-gray-500 py-2 px-3 rounded-lg shadow-sm text-sm leading-tight focus:outline-none focus:shadow-outline"
-                        value={bookData.stock}
+                        value={formData.stock}
                         onChange={handleChange}
-                        required={bookData.availability === 'selling'}
+                        required={formData.availability === 'selling'}
                     />
                 </Container>}
                 <Container labelName='Publish Year'>
@@ -127,20 +127,20 @@ const BookForm = ({bookData, setBookData}) => {
                         name="publishYear"
                         placeholder="Enter publish year"
                         className="mt-1 block w-full appearance-none bg-white border border-gray-300 hover:border-gray-500 py-2 px-3 rounded-lg shadow-sm text-sm leading-tight focus:outline-none focus:shadow-outline"
-                        value={bookData.publishYear}
+                        value={formData.publishYear}
                         onChange={handleChange}
                         required
                     />
                 </Container>
                 <ImagesUploader
-                    formData={bookData}
-                    setFormData={setBookData}
+                    formData={formData}
+                    setFormData={setFormData}
                     name="images"
                     labelName="Book Images"
                 />
                 <ImagesUploader
-                    formData={bookData}
-                    setFormData={setBookData}
+                    formData={formData}
+                    setFormData={setFormData}
                     name="bookPlaceImages"
                     labelName="Book Place Images"
                 />

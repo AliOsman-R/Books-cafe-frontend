@@ -1,34 +1,32 @@
-import React, { useState } from "react";
-// import {
-//   GoogleMap,
-//   GoogleMapsMarkerClusterer,
-//   Marker,
-// } from "@react-google-maps/api";
+import React from 'react';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
+import "leaflet/dist/leaflet.css";
+import MarkerClusterGroup from "react-leaflet-cluster";
+import { Icon } from 'leaflet';
 
-const Map = ({ center, onLocationChange }) => {
-  const [markerPosition, setMarkerPosition] = useState(center);
+const Map = ({ cafes }) => {
+  const center = [3.1582811161591784, 101.7122779878382]
+  const centers = cafes.length === 1? [cafes[0].coordinates[1], cafes[0].coordinates[0]] : center
 
-  const handleMarkerDragEnd = (event) => {
-    setMarkerPosition({
-      lat: event.latLng.lat(),
-      lng: event.latLng.lng(),
-    });
-    onLocationChange(markerPosition);
-  };
+  const customIcon = new Icon({
+    iconUrl: "https://cdn-icons-png.flaticon.com/512/447/447031.png",
+    iconSize: [38, 38] // size of the icon
+  });
 
   return (
-    // <GoogleMapsMarkerClusterer
-    //   center={center}
-    //   zoom={8}
-    //   mapContainerStyle={{ height: "400px", width: "100%" }}
-    // >
-    //   <Marker
-    //     position={markerPosition}
-    //     draggable={true}
-    //     onDragEnd={handleMarkerDragEnd}
-    //   />
-    // </GoogleMapsMarkerClusterer>
-    <div className=""></div>
+    <MapContainer center={centers} zoom={cafes.length === 1? 14 : 10} >
+     <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      <MarkerClusterGroup>
+        {cafes.map((cafe, index) => (
+          <Marker key={index} icon={customIcon} position={[cafe.coordinates[1], cafe.coordinates[0]]}>
+            <Popup>{cafe.name}</Popup>
+          </Marker>
+        ))}
+      </MarkerClusterGroup>
+    </MapContainer>
   );
 };
 

@@ -13,7 +13,7 @@ export const isAnyFieldEmpty = (state) => {
   
     // Check if any value is an empty string
     for (let value of values) {
-      if (value?.trim() === '') {
+      if (typeof value === 'string' && value?.trim() === '') {
         return true; // Return true if any field is empty
       }
     }
@@ -125,8 +125,9 @@ export const areRequiredMenuFieldsMissing = (menuItemData) => {
 
 
 export const isEventDataChanged = (eventData, originalEventData) => {
+  if(!eventData) return false
   return (
-    eventData.title.trim() !== originalEventData.title ||
+    eventData?.title.trim() !== originalEventData?.title ||
     eventData.location.trim() !== originalEventData.location ||
     eventData.description.trim() !== originalEventData.description ||
     eventData.startTime.trim() !== originalEventData.startTime ||
@@ -138,7 +139,7 @@ export const isEventDataChanged = (eventData, originalEventData) => {
 
 export const areRequiredEventFieldsMissing = (eventData) => {
   return (
-      !eventData.title.trim() ||
+      !eventData?.title.trim() ||
       !eventData?.location?.trim() ||
       !eventData.description.trim() ||
       !eventData.startTime.trim() ||

@@ -35,7 +35,7 @@ const ModalContent = styled.div`
     display: flex;
     flex-direction: column;
     // height:90vh;
-    width: 60%;
+    // width: 80vw;
     min-width: 400px;
 
     ${({ $isOpen }) =>

@@ -25,6 +25,7 @@ import Cafes from "./pages/Cafes";
 import Cafe from "./pages/Cafe/index";
 import CafeAccount from "./pages/ManageCafe/Account/index";
 import CafeList from "./pages/ManageCafe/List/index";
+import Events from "./pages/Events";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route element={<OutletComp />}>
             <Route path="/about" element={<About />} />
+            <Route path="/events" element={<Events />} />
             <Route path="/auth">
               <Route path="signup" element={<SignUp />} />
               <Route path="login" element={<Login />} />

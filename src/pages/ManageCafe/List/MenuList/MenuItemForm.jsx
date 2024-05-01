@@ -5,7 +5,7 @@ import ImagesUploader from '../../../../components/ImagesUploader';
 
 const MenuItemForm = ({formData, setFormData}) => {
     const [ingredient, setIngredient] = useState('')
-    const isCountable = formData.isCountable 
+    // const isCountable = formData.isCountable 
 
 
     const handleChange = (e) => {
@@ -50,8 +50,6 @@ const MenuItemForm = ({formData, setFormData}) => {
             ingredients: newIngredients
         }));
     };
-
-    console.log(formData)
 
     return (
         <div className="pb-[30px]">
@@ -111,7 +109,7 @@ const MenuItemForm = ({formData, setFormData}) => {
                         ))}
                     </ul>
                 </Container>
-                <Container labelName='Is Item Countable (Is the item can be sold as numbers of items example: cakes)'>
+                {/* <Container labelName='Is Item Countable (Is the item can be sold as numbers of items example: cakes)'>
                     <select
                         name="isCountable"
                         className={inputStyle}
@@ -122,8 +120,8 @@ const MenuItemForm = ({formData, setFormData}) => {
                         <option value={true} >Yes</option>
                         <option value={false} >No</option>
                     </select>
-                </Container>
-                {!isCountable && <Container labelName='Status'>
+                </Container> */}
+                <Container labelName='Status'>
                     <select
                         name="status"
                         className={inputStyle}
@@ -134,8 +132,8 @@ const MenuItemForm = ({formData, setFormData}) => {
                         <option value="Available">Available</option>
                         <option value="Not Available">Not Available</option>
                     </select>
-                </Container>}
-                {isCountable && <Container labelName='Stock'>
+                </Container>
+                <Container labelName='Stock'>
                     <PrimaryInput
                         type="number"
                         name="stock"
@@ -144,9 +142,9 @@ const MenuItemForm = ({formData, setFormData}) => {
                         className="mt-1 block w-full appearance-none bg-white border border-gray-300 hover:border-gray-500 py-2 px-3 rounded-lg shadow-sm text-sm leading-tight focus:outline-none focus:shadow-outline"
                         value={formData.stock}
                         onChange={handleChange}
-                        required={formData.availability === 'selling'}
+                        required
                     />
-                </Container>}
+                </Container>
                 <Container labelName='Price ($)'>
                     <PrimaryInput
                         type="number"
@@ -156,7 +154,7 @@ const MenuItemForm = ({formData, setFormData}) => {
                         className="mt-1 block w-full appearance-none bg-white border border-gray-300 hover:border-gray-500 py-2 px-3 rounded-lg shadow-sm text-sm leading-tight focus:outline-none focus:shadow-outline"
                         value={formData.price}
                         onChange={handleChange}
-                        required={formData.availability === 'selling'}
+                        required
                     />
                 </Container>
                 <Container labelName='Description'>

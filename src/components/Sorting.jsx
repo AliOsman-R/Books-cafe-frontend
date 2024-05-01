@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
-const Sorting = ({ context, books, menu, setData  }) => {
+const Sorting = ({ context, items, setData  }) => {
     const [selection, setSelection] = useState('All');
 
     useEffect(() => {
         let results = [];
         if (selection === 'All') {
-            results = context === 'books' ? books : menu;
+            results = items;
         } else {
             results = context === 'books' 
-                ? books.filter(book => book.genre === selection)
-                : menu.filter(item => item.type === selection);
+                ? items.filter(book => book.genre === selection)
+                : items.filter(item => item.type === selection);
         }
         setData(results);
-    }, [selection, books, menu, context, setData]);
+    }, [selection, items, context, setData]);
 
     const options = context === 'books'
-        ? [...new Set(books.map(book => book.genre))]
-        : [...new Set(menu.map(item => item.type))];
+        ? [...new Set(items.map(book => book.genre))]
+        : [...new Set(items.map(item => item.type))];
 
     return (
         <div className="container p-4">
@@ -32,8 +33,8 @@ const Sorting = ({ context, books, menu, setData  }) => {
                     className="mt-1 block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-primaryColor focus:border-primaryColor sm:text-sm rounded-md"
                 >
                     <option value="All">All {context === 'books' ? 'Genres' : 'Types'}</option>
-                    {options.map((option, index) => (
-                        <option key={index} value={option}>{option}</option>
+                    {options.map((option) => (
+                        <option key={uuidv4()} value={option}>{option}</option>
                     ))}
                 </select>
             </div>

@@ -7,6 +7,8 @@ export default function GlobalContext() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState({});
   const [isAuth, setIsAuth] = useState(false);
+  const [maxDistance, setMaxDistance] = useState(1200)
+  const [selectedCafe, setSelectedCafe] = useState({});
 
   const actions = (action) => {
     const { type, payload } = action;
@@ -18,6 +20,10 @@ export default function GlobalContext() {
         return setUser(payload);
       case "SET_IS_AUTH":
         return setIsAuth(payload);
+      case "SET_SELECED_CAFE":
+        return setSelectedCafe(payload);
+      case "SET_MAX_DISTANCE":
+        return setMaxDistance(payload);
       default:
         return loading;
     }
@@ -43,5 +49,5 @@ export default function GlobalContext() {
       });
   }, []);
 
-  return { actions, loading, user, isAuth };
+  return { actions, loading, user, isAuth, selectedCafe, maxDistance };
 }

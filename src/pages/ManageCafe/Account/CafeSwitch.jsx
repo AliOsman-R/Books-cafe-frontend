@@ -57,7 +57,7 @@ const CafeSwitch = ({ setOpenModal, openModal }) => {
       <Modal setOpenModal={setOpenModal} $isOpen={openModal}>
         <Modal.Header setOpenModal={setOpenModal}>Switch To Cafe</Modal.Header>
         <Modal.Body>
-          <div className="w-full">
+          <div className="w-[1114px]">
             <CafeForm
               cafeInfo={cafeInfo}
               setCafeInfo={setCafeInfo}

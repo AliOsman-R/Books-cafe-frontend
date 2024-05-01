@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Context } from '../../../context/GlobalContext';
 import { Container, PrimaryInput, phoneInputStyle } from '../../../components/inputs';
-import InfoCard from '../../../components/InfoCard';
+import InfoCard from '../../../components/cards/InfoCard';
 import {userInitialState} from '../../../data/initialStates'
 import { PrimaryButton } from '../../../components/buttons';
 import 'react-phone-input-2/lib/bootstrap.css'

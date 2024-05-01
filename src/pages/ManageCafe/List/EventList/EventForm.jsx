@@ -3,7 +3,25 @@ import { Container, PrimaryInput, TextareaInput } from '../../../../components/i
 import { toast } from 'sonner';
 import ImagesUploader from '../../../../components/ImagesUploader';
 import { compareTimes } from '../../../../utils/AppUtils';
+import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 const EventForm = ({formData, setFormData}) => {
+    const [editorState, setEditorState] = useState(() => {
+        if (formData.description) {
+            return EditorState.createWithContent(convertFromRaw(JSON.parse(formData.description)));
+        } else {
+            return EditorState.createEmpty();
+        }
+    });
+
+    const handleDesChange = (editorState) => {
+        setEditorState(editorState);
+        setFormData(prev => ({
+            ...prev,
+            description: JSON.stringify(convertToRaw(editorState.getCurrentContent()))
+        }));
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -31,7 +49,6 @@ const EventForm = ({formData, setFormData}) => {
             [name]: value
         }));
     };
-    console.log(formData)
 
     return (
         <div className="pb-[30px]">
@@ -89,20 +106,26 @@ const EventForm = ({formData, setFormData}) => {
                     />
                 </Container>
                 <Container labelName='Description'>
-                    <TextareaInput
-                        name="description"
-                        placeholder="Enter description"
-                        className="mt-1 block w-full appearance-none bg-white border border-gray-300 hover:border-gray-500 py-2 px-3 rounded-lg shadow-sm text-sm leading-tight focus:outline-none focus:shadow-outline"
-                        value={formData.description}
-                        onChange={handleChange}
-                        required
+                    <Editor
+                        editorState={editorState}
+                        onEditorStateChange={handleDesChange}
+                        toolbar={{
+                            options: ['inline', 'blockType', 'list', 'textAlign', 'link', 'history'],
+                            inline: {
+                                options: ['bold', 'italic', 'underline', 'strikethrough'],
+                                className: 'demo-option-custom',
+                            },
+                            list: {
+                                options: ['unordered', 'ordered'],
+                            },
+                        }}
                     />
                 </Container>
                 <ImagesUploader
                     formData={formData}
                     setFormData={setFormData}
                     name="images"
-                    labelName="Menu Item Images"
+                    labelName="Event Images"
                 />
             </form>
         </div>

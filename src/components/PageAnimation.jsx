@@ -22,7 +22,7 @@ const PageAnimationStyle = styled.div`
   width: 100%;
   height: 100%;
   background-color: white;
-  animation: ${slideInOut} 0.4s ease-in-out;
+  animation: ${slideInOut} 0.6s ease-in-out;
   z-index: 1100;
   overflow-y: auto;
 `
@@ -31,22 +31,22 @@ const PageButton = styled.span`
   position:absolute;
   z-index:1000;
   right:0;
-  padding:8px 15px;
+  padding:4px 10px;
   margin:5px;
   color:white;
   font-weight:bold;
   cursor:pointer;
-  border-radius:100px;
+  border-radius:50px;
   background-color: black;
-  border: 3px solid red; 
+  // border: 3px solid var(--primary-color); 
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   &:hover {
-    background-color: red; 
+    background-color: var(--primary-color); 
     color: #ffffff;
   }
 `
 const PageContent = styled.div`
-  background-color: var(--primary-color);
+  background-color: var(--primary-color-hover);
   padding:5px;
   padding-left:10px;
 `;

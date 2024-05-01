@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import InfoCard from '../../../components/InfoCard'
+import InfoCard from '../../../components/cards/InfoCard'
 import { Container } from '../../../components/inputs'
 import { cafeInitialState } from '../../../data/initialStates'
 import { PrimaryButton } from '../../../components/buttons'
@@ -28,8 +28,9 @@ const CafeProfile = () => {
     useEffect(() => {
     httpRequest.get(`/cafe/user-cafe/${user._id}`)
     .then(({data}) => {
-        const {latitude,longitude} = data.cafe.coordinates
-        const cafeData = {...data.cafe, latitude:latitude.toString(), longitude:longitude.toString()}
+        console.log(data)
+        const [longitude, latitude] = data.cafe.coordinates
+        const cafeData = {...data.cafe, latitude, longitude}
         setCafeInfo(cafeData)
         setOriginalCafeInfo({...cafeData,workingDays:data.cafe?.workingDays})
         setWorkingDays(data.cafe?.workingDays.map(workDay => ({...workDay,id:workDay._id})))
@@ -114,7 +115,8 @@ const CafeProfile = () => {
             return toast.error('Cafes information must not be empty')
         }
 
-        const coordinates ={latitude:parseFloat(cafeInfo.latitude), longitude:parseFloat(cafeInfo.longitude)}
+        const coordinates = [parseFloat(cafeInfo.longitude), parseFloat(cafeInfo.latitude)]
+        console.log(coordinates)
 
         setBtnLoading(true);
         if (cafeInfo.image !== originalCafeInfo.image) {
@@ -127,7 +129,7 @@ const CafeProfile = () => {
             console.log(data);
             toast.success(data?.message);
             const {latitude,longitude} = data.cafe.coordinates
-            const cafeData = {...data.cafe, latitude:latitude.toString(), longitude:longitude.toString()}
+            const cafeData = {...data.cafe, latitude, longitude}
             setCafeInfo(cafeData);
             setOriginalCafeInfo(cafeData);
           })

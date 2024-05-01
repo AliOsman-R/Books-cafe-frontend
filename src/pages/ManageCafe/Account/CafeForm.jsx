@@ -4,6 +4,7 @@ import PhoneInput from 'react-phone-input-2';
 import { HiQuestionMarkCircle } from 'react-icons/hi';
 import WorkingDaysSelector from './WorkingDaysSelector';
 import { states } from '../../../data/data';
+import { v4 as uuidv4 } from 'uuid';
 
 const CafeForm = ({workingDays, setWorkingDays, cafeInfo, setCafeInfo}) => {
     const [showDescription, setShowDescription] = useState(false);
@@ -30,11 +31,15 @@ const CafeForm = ({workingDays, setWorkingDays, cafeInfo, setCafeInfo}) => {
         if (!e?.target) {
           setCafeInfo(prevState => ({ ...prevState, phoneNumber: e }));
         } else {
-          const { name, value } = e?.target;
-          setCafeInfo(prevState => ({ ...prevState, [name]: value }));
+            const { name, value } = e?.target;
+            if(name === 'longitude' || name === 'latitude')
+                setCafeInfo(prevState => ({ ...prevState, [name]: parseFloat(value) }));
+            else
+                setCafeInfo(prevState => ({ ...prevState, [name]: value }));
         }
       };
 
+      console.log(cafeInfo.longitude, cafeInfo.latitude)
   return (
     <>
         <div className="grid lg:grid-cols-2 md:grid-cols-1   gap-5">
@@ -53,8 +58,8 @@ const CafeForm = ({workingDays, setWorkingDays, cafeInfo, setCafeInfo}) => {
             </Container>
             <Container labelName={"State"}>
                 <select value={cafeInfo.state} className={inputStyle} onChange={handleChange} name="state" id="">
-                {states.map((state,index) => (
-                    <option key={index} value={state}>{state}</option>
+                {states.map((state) => (
+                    <option key={uuidv4()} value={state}>{state}</option>
                 ))}
                 </select>
             </Container>

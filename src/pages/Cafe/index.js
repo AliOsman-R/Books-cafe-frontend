@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { v4 as uuidv4 } from 'uuid';
 import PageAnimation from "../../components/PageAnimation";
 import { httpRequest } from "../../utils/httpsRequest";
 import { FaMapLocationDot } from "react-icons/fa6";
 import { TiMessages } from "react-icons/ti";
-import { useParams } from "react-router-dom";
+import { Navigate, useLocation, useParams } from "react-router-dom";
 import { MdDescription } from "react-icons/md";
 import { AppLoader } from "../../components/LoaderSpinner";
 import defaultCafeImage from '../../assets/default-cafe-image.jpg';
@@ -15,39 +16,49 @@ import Menu from "./Menu/";
 import Events from "./Events/";
 import WorkingDaysPage from "./WorkingDaysPage";
 import StarRating from "../../components/StarRating";
+import { Context } from "../../context/GlobalContext";
 
 const tabs = ['Books', 'Menu', 'Events', 'Working Days'];
 const Cafe = () => {
   const { id } = useParams();
   const [cafe, setCafe] = useState(cafeInitialState);
-  const [pageLoading, setPageLoading] = useState(false);
+  // const [pageLoading, setPageLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const dayInfo = getDayInfo(cafe?.workingDays || []);
+  const {selectedCafe} = useContext(Context);
+  console.log(selectedCafe)
 
   useEffect(() => {
-    setPageLoading(true)
-     httpRequest.get(`/cafe/${id}`)
-     .then(({data}) => {
-       setCafe(data.cafe);
-     }).catch(err => {
-      console.log(err)
-     }).finally(() => setPageLoading(false))
+    setCafe(selectedCafe)
+    // setPageLoading(true)
+    //  httpRequest.get(`/cafe/${id}`)
+    //  .then(({data}) => {
+    //    setCafe(data.cafe);
+    //  }).catch(err => {
+    //   console.log(err)
+    //  }).finally(() => setPageLoading(false))
 
-  }, [id]);
+  }, [selectedCafe]);
 
-  if(pageLoading)  {
-    return (
-      <PageAnimation>
-        <div className="flex justify-center items-center h-screen">
-          <AppLoader/>
-        </div>
-      </PageAnimation>
-    )
-  }   
+  // if(pageLoading)  {
+  //   return (
+  //     <PageAnimation>
+  //       <div className="flex justify-center items-center h-screen">
+  //         <AppLoader/>
+  //       </div>
+  //     </PageAnimation>
+  //   )
+  // }  
+  
+  if(Object.keys(selectedCafe).length === 0)
+  {
+    return <Navigate to={'/cafes'}/>
+  }
 
 
   return (
     <PageAnimation>
+    <>
         {/* Hero Section */}
         <div>
           <img src={cafe.image || defaultCafeImage} className=" object-cover min-h-[380px] max-h-[380px] w-full shadow-md"/>
@@ -107,9 +118,9 @@ const Cafe = () => {
         {/* Tabs for Menu, Books, Events, Working Days */}
         <div className="h-screen mt-5 mx-auto md:px-10 ssm:px-0 bg-gray-50">
           <div className="flex justify-center border-b bg-white">
-            {tabs.map((tab) => (
+            {tabs.map((tab, index) => (
               <button
-                key={tab}
+                key={uuidv4()}
                 onClick={() => setActiveTab(tab)}
                 className={`py-4 px-6 block focus:outline-none ${activeTab === tab ? 'border-b-2 border-primaryColor text-primaryColor' : 'hover:text-primaryColor'}`}
               >
@@ -118,22 +129,23 @@ const Cafe = () => {
             ))}
           </div>
           <div className="py-6 bg-gray-50">
-            <TabContent activeTab={activeTab} cafe={cafe}/>
+            <TabContent activeTab={activeTab} cafe={cafe} id={id}/>
           </div>
         </div>
+        </>
     </PageAnimation>
   );
 };
 
 
-const TabContent = ({activeTab, cafe}) => {
+const TabContent = ({activeTab, cafe, id}) => {
   switch (activeTab) {
     case 'Books':
-      return <Books cafe={cafe} />;
+      return <Books cafe={cafe} id={id} />;
     case 'Menu':
-      return <Menu cafe={cafe} />;
+      return <Menu cafe={cafe} id={id} />;
     case 'Events':
-      return <Events cafe={cafe} />;
+      return <Events cafe={cafe} id={id} />;
     case 'Working Days':
       return <WorkingDaysPage cafe={cafe} />;
     default:

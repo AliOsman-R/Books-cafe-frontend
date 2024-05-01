@@ -87,7 +87,7 @@ export const TertiaryButton = styled.button`
 
 export const linkStyle = 'text-primaryColor font-semibold hover:text-primaryColorHover transition duration-200 ease-in-out'
 
-export const linkBtnStyle = 'text-white flex justify-center h-[48px] px-10 py-4 flex items-center rounded-lg font-semibold hover:bg-primaryColorHover bg-primaryColor transition duration-200 ease-in-out'
+export const linkBtnStyle = 'text-white flex justify-center h-[40px] px-10 py-4 flex items-center rounded-lg font-semibold hover:bg-primaryColorHover bg-primaryColor transition duration-200 ease-in-out'
 
 
 

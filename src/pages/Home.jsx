@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import secondaryImage from "../assets/secondary-image.jpg";
 import { Link } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
 import { httpRequest } from "../utils/httpsRequest";
 import { AppLoader } from "../components/LoaderSpinner";
-import CafeCard from "../components/CafeCard";
+import CafeCard from "../components/cards/CafeCard";
 import { CgUnavailable } from "react-icons/cg";
 
 const linkStyle =
@@ -54,7 +53,7 @@ const Home = () => {
     {
       observer.observe(storesRef.current);
     }
-    observer.observe(homeImage.current);
+    // observer.observe(homeImage.current);
 
     return () => {
       observer.disconnect();
@@ -65,7 +64,7 @@ const Home = () => {
     <div className="flex flex-col mt-0 ">
       <div
         className="h-screen flex flex-col items-center bg-[url('./assets/main-image.jpg')] bg-cover post"
-        ref={homeImage}
+        // ref={homeImage}
       >
         <div className=" text-primaryTextColor p-5 mt-[270px] flex justify-center gap-5 flex-col items-center">
           <h1 className="lg:text-6xl ssm:text-3xl text-center">
@@ -115,8 +114,8 @@ const Home = () => {
             {isData && sortedCafes.map(
               (cafe) => (
                 <CafeCard
-                  key={uuidv4()}
-                  cafe={cafe}
+                  key={cafe._id}
+                  item={cafe}
                   />
               )
               )}

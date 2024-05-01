@@ -34,7 +34,7 @@ const Profile = ({}) => {
 
   if(user.role !== 'owner' && location.pathname.includes('manage-cafe'))
   {
-    return <Navigate to={`/user/profile/user-account`} replace />;
+    return <Navigate to={`/user/profile/manage-user/user-account`} replace />;
   }
 
 

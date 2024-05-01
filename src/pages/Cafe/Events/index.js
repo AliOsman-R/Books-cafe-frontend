@@ -1,63 +1,39 @@
 import React, { useEffect, useState } from 'react'
-import Search from '../../../components/Search';
-import Filter from '../../../components/Filter';
 import { httpRequest } from '../../../utils/httpsRequest';
-import EventCard from '../../../components/EventCard';
-import { AppLoader } from '../../../components/LoaderSpinner';
+import { sortEvents } from '../../../utils/AppUtils';
+import ListComponent from '../../../components/ListComponent';
+import ItemCard from '../../../components/cards/ItemCard';
 
-const Events = ({cafe}) => {
- const [events, setEvents] = useState([])
-const [filteredEvents, setFilteredEvents] = useState([])
-const [pageLoading, setPageLoading] = useState(false);
+const Events = ({cafe, id}) => {
+  const [events, setEvents] = useState([])
+  const [filteredEvents, setFilteredEvents] = useState([])
+  const [pageLoading, setPageLoading] = useState(false);
 
   useEffect(() => {
     setPageLoading(true)
-    httpRequest.get(`/event/cafe-events/${cafe._id}`)
+    httpRequest.get(`/events/cafe-events/${id}`)
     .then(({data}) => {
       console.log(data)
-      setEvents(data.events)
-      setFilteredEvents(data.events)
+      const sortedEvents = sortEvents(data.events)
+      setEvents(sortedEvents)
+      setFilteredEvents(sortedEvents)
     })
     .catch(err => {
       console.log(err)
     })
     .finally(() => {setPageLoading(false)})
-  }, [])
-
-  const handleSearch = (e, setSearchQuery) => {
-    const query = e.target.value;
-    setSearchQuery(query);
-    const filteredData = events.filter(event =>
-        event.title.toLowerCase().includes(query.toLowerCase()) 
-    );
-    setFilteredEvents(filteredData);
-  };
-
-
-  if(pageLoading)  {
-    return (
-        <div className="flex justify-center items-center h-[50vh]">
-            <AppLoader/>
-        </div>
-    )
-  }   
+  }, [])  
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex justify-end">
-        <Search handleSearch={handleSearch} />
-      </div>
-    <div className="flex flex-grow gap-2 mt-2">
-      <div className="ssm:hidden md:flex">
-        <Filter/>
-      </div>
-      <div className="flex-1 flex flex-col gap-3 justify-center">
-        {filteredEvents.map(event => (
-          <EventCard key={event.id} event={event} cafe={cafe} />
-        ))}
-      </div>
-    </div>
-    </div>
+    <ListComponent
+      cafe={cafe}
+      items={events}
+      filteredItems={filteredEvents}
+      setFilteredItems={setFilteredEvents}
+      pageLoading={pageLoading}
+      CardComponent={ItemCard}
+      type={'event'}
+    />
   );
 }
 

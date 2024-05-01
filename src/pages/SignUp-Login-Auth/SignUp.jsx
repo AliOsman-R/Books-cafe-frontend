@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Container, PrimaryInput } from "../../components/inputs";
+import { Container, PrimaryInput, inputStyle } from "../../components/inputs";
 import { PrimaryButton, linkStyle } from "../../components/buttons";
 import { validateEmail, validatePassword } from "../../utils/validation";
 import { httpRequest } from "../../utils/httpsRequest";
 import { useNavigate } from "react-router-dom";
 import { BtnLoader } from "../../components/LoaderSpinner";
 import { toast } from "sonner";
-import AuthCard from "../../components/AuthCard";
+import AuthCard from "../../components/cards/AuthCard";
+import { IoEye } from "react-icons/io5";
+import { IoMdEyeOff } from "react-icons/io";
 
 const SignUp = () => {
   const [credentials, setCredentials] = useState({
@@ -17,7 +19,9 @@ const SignUp = () => {
   });
   const [validationError, setValidationError] = useState("");
   const [btnLoading, setBtnLoading] = useState(false);
+  const [showPass, setShowPass] = useState(false)
   const navigate = useNavigate();
+  const showPassRef = useRef(null)
 
   // const [location, setLocation] = useState('')
   // const getLocation = () => {
@@ -48,6 +52,10 @@ const SignUp = () => {
     const { name, value } = e.target;
     setCredentials({ ...credentials, [name]: value.trim() });
   };
+
+  const handleShowPass = () => {
+    setShowPass(!showPass)
+  }
 
   useEffect(() => {
     let timer;
@@ -140,14 +148,12 @@ const SignUp = () => {
             />
           </Container>
           <Container labelName="Password">
-            <PrimaryInput
-              required
-              value={credentials.password}
-              onChange={handleChange}
-              name="password"
-              type="password"
-              placeholder="Your password"
-            />
+             <div className={` ${inputStyle} flex items-center justify-between `}>
+                <input className='flex border-none focus:outline-none w-full' ref={showPassRef} required value={credentials.password} onChange={handleChange} name="password" type={showPass ? 'text' : 'password'} placeholder="Your password" />
+                <div className=' cursor-pointer' onClick={handleShowPass}>
+                  {showPass ?<IoEye size={20}/> : <IoMdEyeOff size={20}/> } 
+                </div>
+            </div>
           </Container>
           <PrimaryButton
             className="w-full h-[48px]"

@@ -48,10 +48,18 @@ const WorkingDaysSelector = ({workingDays, setWorkingDays}) => {
 
   const handleRemoveDay = (id) => {
     const updatedDays = workingDays.filter(day => day.id !== id);
-    console.log(updatedDays)
     setWorkingDays(updatedDays);
   };
-  console.log(workingDays)
+
+  const handleCancel = () => {
+    setNewDay({
+      id: null,
+      day: '',
+      startTime: '',
+      endTime: '',
+      isOpen: false
+    })
+  }
 
   return (
     <div className="p-4">
@@ -98,9 +106,17 @@ const WorkingDaysSelector = ({workingDays, setWorkingDays}) => {
         >
           {newDay.id ? 'Update Day' : 'Add Day'}
         </PrimaryButton>
+        {newDay.id  && 
+          <PrimaryButton
+            onClick={handleCancel}
+            className=" h-[20px]"
+          >
+            Cancel
+          </PrimaryButton>
+        }
       </div>
       <div className="grid gap-2">
-        {sortWorkingDays(workingDays).map((day, index) => (
+        {sortWorkingDays(workingDays).map((day) => (
           <div
             key={day.id}
             className="flex items-center bg-gray-100 rounded p-4 border-l-4 border-primaryColor"

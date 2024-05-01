@@ -6,7 +6,7 @@ import { BtnLoader } from '../../../components/LoaderSpinner';
 import { toast } from 'sonner';
 import { validatePassword } from '../../../utils/validation';
 import { httpRequest } from '../../../utils/httpsRequest';
-import InfoCard from '../../../components/InfoCard';
+import InfoCard from '../../../components/cards/InfoCard';
 
 const PasswordForm = () => {
       const [password, setPassword] = useState({oldPass: "", pass: "", confPass: "",});

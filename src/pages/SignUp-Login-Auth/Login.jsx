@@ -1,23 +1,30 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Container, PrimaryInput } from '../../components/inputs';
+import { Container, PrimaryInput, inputStyle } from '../../components/inputs';
 import { PrimaryButton, linkStyle } from '../../components/buttons';
-import secondaryImage from "../../assets/secondary-image.jpg";
 import { httpRequest } from '../../utils/httpsRequest';
+import { IoEye } from "react-icons/io5";
+import { IoMdEyeOff } from "react-icons/io";
 import { BtnLoader } from '../../components/LoaderSpinner';
 import { toast } from 'sonner'
 import { Context } from '../../context/GlobalContext';
-import AuthCard from '../../components/AuthCard';
+import AuthCard from '../../components/cards/AuthCard';
 
 const Login = () => {
   const [loginInfo, setLoginInfo] = useState({email:'', password:''});
   const [btnLoading, setBtnLoading] = useState(false)
+  const [showPass, setShowPass] = useState(false)
   const {actions} = useContext(Context)
   const navigate = useNavigate()
+  const showPassRef = useRef(null)
 
 
   const handleChange = (e) => {
     setLoginInfo({...loginInfo, [e.target.name]:e.target.value})
+  }
+
+  const handleShowPass = () => {
+    setShowPass(!showPass)
   }
 
   const handleSubmit = (e) => {
@@ -45,7 +52,12 @@ const Login = () => {
               <PrimaryInput required value={loginInfo.email} onChange={handleChange} name="email" type="email" placeholder="example@gmail.com" />
           </Container>
           <Container labelName="Password">
-              <PrimaryInput required value={loginInfo.password} onChange={handleChange} name="password" type="password" placeholder="**************" />
+            <div className={` ${inputStyle} flex items-center justify-between `}>
+                <input className='flex border-none focus:outline-none w-full' ref={showPassRef} required value={loginInfo.password} onChange={handleChange} name="password" type={showPass ? 'text' : 'password'} placeholder="**************" />
+                <div className=' cursor-pointer' onClick={handleShowPass}>
+                  {showPass ?<IoEye size={20}/> : <IoMdEyeOff size={20}/> } 
+                </div>
+            </div>
           </Container>
           <PrimaryButton className='w-full h-[48px]' disabled={btnLoading} type="submit">{btnLoading? <BtnLoader/> : 'Login'}</PrimaryButton>
         </form>

@@ -10,8 +10,8 @@ const ImagesUploader = ({ formData, setFormData, name, labelName }) => {
         const { files } = e.target;
         const newFiles = Array.from(files);
     
-        if (newFiles.length + formData[name].length > 5) {
-            toast.error('You can upload a maximum of 5 images.');
+        if (newFiles.length + formData[name].length > 4) {
+            toast.error('You can upload a maximum of 4 images.');
             return;
         }
     

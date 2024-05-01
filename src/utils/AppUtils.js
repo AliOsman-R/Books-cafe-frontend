@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const setPagination = (recordsPerPage, currentPage, data) => {
     const lastIndex = currentPage * recordsPerPage
     const firstIndex = lastIndex - recordsPerPage
@@ -153,6 +155,38 @@ export const getUniqueAttributes = (items, attributeName) => {
       }
   });
 
-  // Convert the Set back to an array
   return Array.from(uniqueAttributes);
 }
+
+
+export const sortEvents = (currentEvents) => {
+  currentEvents.sort((a, b) => {
+    const momentA = moment(a.date);
+    const momentB = moment(b.date);
+
+    // Compare the moments
+    if (momentA.isBefore(momentB)) {
+      return -1;
+    } else if (momentA.isAfter(momentB)) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
+  return currentEvents;
+}
+
+
+export const calculateDuration = (event) => {
+  const dateFormat = "YYYY-MM-DD";
+  const timeFormat = "hh:mm A";
+  
+  const startDateTime = moment(`${event.date} ${event.startTime}`, `${dateFormat} ${timeFormat}`);
+  const endDateTime = moment(`${event.date} ${event.endTime}`, `${dateFormat} ${timeFormat}`);
+  
+  const duration = moment.duration(endDateTime.diff(startDateTime));
+  const hours = duration.hours();
+  const minutes = duration.minutes();
+
+  return `${hours} hour(s) and ${minutes} minute(s)`;
+};

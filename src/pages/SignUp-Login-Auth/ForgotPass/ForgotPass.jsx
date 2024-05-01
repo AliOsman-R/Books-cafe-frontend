@@ -6,7 +6,7 @@ import { Container, PrimaryInput } from '../../../components/inputs'
 import { PrimaryButton, linkStyle } from '../../../components/buttons'
 import { BtnLoader } from '../../../components/LoaderSpinner'
 import { httpRequest } from '../../../utils/httpsRequest'
-import AuthCard from '../../../components/AuthCard'
+import AuthCard from '../../../components/cards/AuthCard'
 
 const ForgotPass = () => {
     const [email, setEmail] = useState('')

@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import { FaClock, FaRegCalendarTimes, FaRegCalendarCheck } from 'react-icons/fa';
+import Map from '../../components/Map';
 
 const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const WorkingDaysPage = ({cafe}) => {
   const [workingDays, setWorkingDays] = useState([]);
-  const [currentDayIndex, setCurrentDayIndex] = useState(new Date().getDay());
 
   useEffect(() => {
    setWorkingDays(cafe.workingDays)
+  }, []);
+
+  useEffect(() => {
+    if(cafe?._id)
+      document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "auto";
+    }
   }, []);
 
   const getWorkingDay = (dayName) => {
@@ -16,7 +25,6 @@ const WorkingDaysPage = ({cafe}) => {
 
   const todayIndex = new Date().getDay() - 1 ; 
 
-  // Create an array of days starting from today until the next 7 days
   const displayedDays = [];
   for (let i = 0; i < 7; i++) {
     const index = (todayIndex + i) % 7;
@@ -24,13 +32,12 @@ const WorkingDaysPage = ({cafe}) => {
   }
 
   return (
-    <div className="container mx-auto mt-5">
-      {/* <h1 className="text-3xl font-bold mb-8 text-center">Working Days</h1> */}
-      <div className="grid grid-cols-1 gap-4">
+    <div className="container mx-auto mt-5 flex flex-col gap-5">
+      <div className="flex justify-between">
         {displayedDays.map((dayName, index) => {
           const workingDay = getWorkingDay(dayName);
           return (
-            <div key={dayName} className="p-4 border rounded-lg bg-white shadow-lg flex items-center justify-between">
+            <div key={dayName} className="p-4 px-10 border rounded-lg bg-white shadow-lg flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-semibold mb-2">{dayName}</h2>
                 {workingDay ? (
@@ -57,6 +64,9 @@ const WorkingDaysPage = ({cafe}) => {
             </div>
           );
         })}
+      </div>
+      <div className="w-full">
+        <Map cafes={[cafe]}/>
       </div>
     </div>
   );
