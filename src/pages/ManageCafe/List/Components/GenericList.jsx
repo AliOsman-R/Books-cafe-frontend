@@ -93,7 +93,7 @@ const GenericList = ({ type, initialState, sortFunction, AddComponent, EditCompo
       }
       <div className="flex flex-wrap justify-center mt-10 min-h-[1114px]">
         {filteredItems.length === 0 && (
-          <div className="flex justify-center items-center h-[50vh]">
+          <div className="flex justify-center items-center h-[50vh] text-gray-400 text-xl">
             {`No ${type} available please add ${type}`}
           </div>
         )}
@@ -125,13 +125,15 @@ const GenericList = ({ type, initialState, sortFunction, AddComponent, EditCompo
         requiredFieldsMissing={requiredFieldsMissing} 
         extraImagesKey={extraImagesKey}
       />
-      <Pagination
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        recordsPerPage={recordsPerPage}
-        setRecordsPerPage={setRecordsPerPage}
-        data={filteredItems}
-      />
+      <div className="flex justify-center items-center">
+        <Pagination
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          recordsPerPage={recordsPerPage}
+          setRecordsPerPage={setRecordsPerPage}
+          data={filteredItems}
+        />
+      </div>
     </div>
   );
 }

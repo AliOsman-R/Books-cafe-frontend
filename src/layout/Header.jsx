@@ -68,6 +68,7 @@ const Header = () => {
 
 
 const NavBar = ({isAuth, location}) => {
+  const {cartItems} = useContext(Context)
   const isActive = (path) => location.pathname === path;
   const linkStyle = "p-2 transition-colors duration-300";
   const activeStyle = "border-b-2 ";
@@ -85,8 +86,9 @@ const NavBar = ({isAuth, location}) => {
           Login
         </Link>
       )}
-      <Link to={"/cart"}>
+      <Link to={"/cart"} className="relative">
         <IoCartOutline className="size-[30px] hover:text-primaryColor cursor-pointer" />
+        <span className="bg-red-500 rounded-[100%] px-[5px] py-[1px] text-xs text-center absolute top-[-5px] right-[-5px]">{isAuth? cartItems.length: 0}</span>
       </Link>
     </>
   )

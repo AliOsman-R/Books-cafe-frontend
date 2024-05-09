@@ -17,12 +17,13 @@ const CafeSwitch = ({ setOpenModal, openModal }) => {
   const {user, actions} = useContext(Context)
 
   const isCafeInfoEmpty = () => {
-    return isAnyFieldEmpty(cafeInfo)
+    return isAnyFieldEmpty(cafeInfo) || (cafeInfo.orderMethods.delivery === false && cafeInfo.orderMethods.pickUpAtCafe === false)
   }
 
   const isInfoChanged = () => {
-    const {state,...rest} = cafeInfo
-    return (isPartChanged(rest) || workingDays.length > 0) ||  cafeInfo.state.trim() !== 'Kuala Lumpur' 
+    const {state, orderMethods, deliveryFee,...rest} = cafeInfo
+    return ((isPartChanged(rest) || workingDays.length > 0) ||  cafeInfo.state.trim() !== 'Kuala Lumpur' || deliveryFee !== 0 
+    || orderMethods.delivery !== false || orderMethods.pickUpAtCafe !== false)
   };
 
   const handleReset = () => {

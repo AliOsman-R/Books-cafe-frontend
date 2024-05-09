@@ -31,18 +31,22 @@ const CafeForm = ({workingDays, setWorkingDays, cafeInfo, setCafeInfo}) => {
         if (!e?.target) {
           setCafeInfo(prevState => ({ ...prevState, phoneNumber: e }));
         } else {
-            const { name, value } = e?.target;
-            if(name === 'longitude' || name === 'latitude')
+            const { name, value, checked  } = e?.target;
+            if (name === 'longitude' || name === 'latitude') {
                 setCafeInfo(prevState => ({ ...prevState, [name]: parseFloat(value) }));
-            else
+            } else if (name === 'pickUpAtCafe' || name === 'delivery') {
+                setCafeInfo(prevState => ({ ...prevState, orderMethods: { ...prevState.orderMethods, [name]: checked } }));
+            } else if (name === 'deliveryFee') {
+                setCafeInfo(prevState => ({ ...prevState, [name]: parseFloat(value) }));
+            } else {
                 setCafeInfo(prevState => ({ ...prevState, [name]: value }));
+            }
         }
       };
-
-      console.log(cafeInfo.longitude, cafeInfo.latitude)
+      
   return (
     <>
-        <div className="grid lg:grid-cols-2 md:grid-cols-1   gap-5">
+        <div className="grid lg:grid-cols-2 md:grid-cols-1 gap-5">
             <Container labelName={"Cafe Name"}>
                 <PrimaryInput type="text" value={cafeInfo.name} onChange={handleChange} name="name" placeholder="Your cafe name" />
             </Container>
@@ -69,9 +73,31 @@ const CafeForm = ({workingDays, setWorkingDays, cafeInfo, setCafeInfo}) => {
             <Container labelName={"Address"}>
                 <PrimaryInput type="text" value={cafeInfo.address} onChange={handleChange} name="address" placeholder="Your cafe address"/>
             </Container>
-            <Container labelName={"Bio"} >
-                <TextareaInput className="min-h-[50px] max-h-full overflow-y-auto" maxLength='250' value={cafeInfo.bio} onChange={handleChange} name="bio" placeholder="Your cafe bio"/>
-            </Container>
+        </div>
+        <Container labelName={"Bio"} className='mt-5'>
+            <TextareaInput className="min-h-[50px] max-h-full overflow-y-auto" maxLength='250' value={cafeInfo.bio} onChange={handleChange} name="bio" placeholder="Your cafe bio"/>
+        </Container>
+        <div className="mt-5">
+        <Container labelName={"Order Fulfillment Options"}>
+            <div className="flex items-center gap-2">
+                <input type="checkbox" checked={cafeInfo.orderMethods.pickUpAtCafe} onChange={handleChange} name='pickUpAtCafe' className="form-checkbox h-5 w-5" />
+                <span className="ml-2 text-gray-900">Pick up at the cafe</span>
+            </div>
+            <div className="flex items-center gap-2">
+                <input type="checkbox" checked={cafeInfo.orderMethods.delivery} onChange={handleChange} name='delivery' className="form-checkbox h-5 w-5" />
+                <span className="ml-2 text-gray-900">Delivery</span>
+            </div>
+            {cafeInfo.orderMethods.delivery &&
+            <div className="grid lg:grid-cols-2 md:grid-cols-1 gap-5">
+                <Container labelName={"Delivery fee"}>
+                    <PrimaryInput type="number" min={0} value={cafeInfo.deliveryFee} onChange={handleChange} name="deliveryFee"  />
+                </Container>
+                <Container labelName={"Delivery Estimation"}>
+                    <PrimaryInput type="text" value={cafeInfo.deliveryEst} onChange={handleChange} name="deliveryEst" placeholder="e.g., 30-45 minutes" />
+                </Container>
+            </div> 
+            }
+        </Container>
         </div>
         <div className="my-5">
             <div className="flex gap-2 mb-2 items-center" >

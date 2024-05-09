@@ -34,6 +34,10 @@ export const isCafeInfoChanged = (cafeInfo, originalCafeInfo, workingDays) => {
       cafeInfo.image !== originalCafeInfo.image ||
       cafeInfo.latitude !== originalCafeInfo.latitude ||
       cafeInfo.longitude !== originalCafeInfo.longitude ||
+      cafeInfo.orderMethods.delivery !== originalCafeInfo.orderMethods.delivery ||
+      cafeInfo.orderMethods.pickUpAtCafe !== originalCafeInfo.orderMethods.pickUpAtCafe ||
+      cafeInfo.deliveryFee !== originalCafeInfo.deliveryFee ||
+      cafeInfo.deliveryEst !== originalCafeInfo.deliveryEst ||
       !areWorkingDaysEqual(workingDays, originalCafeInfo.workingDays)
   );
   };

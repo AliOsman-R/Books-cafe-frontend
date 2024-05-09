@@ -101,6 +101,18 @@ const CafeProfile = () => {
         if (cafeInfo.bio.trim() !== originalCafeInfo.bio) {
             changedCafeInfo['bio'] = cafeInfo.bio.trim()
         }  
+        if (cafeInfo.orderMethods.pickUpAtCafe !== originalCafeInfo.orderMethods.pickUpAtCafe) {
+            changedCafeInfo['orderMethods'] = {...cafeInfo.orderMethods, pickUpAtCafe:cafeInfo.orderMethods.pickUpAtCafe}
+        }  
+        if (cafeInfo.orderMethods.delivery !== originalCafeInfo.orderMethods.delivery) {
+            changedCafeInfo['orderMethods'] = {...cafeInfo.orderMethods, delivery:cafeInfo.orderMethods.delivery}
+        }  
+        if (cafeInfo.deliveryFee !== originalCafeInfo.deliveryFee) {
+            changedCafeInfo['deliveryFee'] = cafeInfo.deliveryFee
+        }  
+        if (cafeInfo.deliveryEst.trim() !== originalCafeInfo.deliveryEst) {
+            changedCafeInfo['deliveryEst'] = cafeInfo.deliveryEst.trim()
+        } 
         if (cafeInfo.phoneNumber !== originalCafeInfo.phoneNumber) {
           changedCafeInfo['phoneNumber'] = cafeInfo.phoneNumber.toString()
         }
@@ -116,7 +128,7 @@ const CafeProfile = () => {
         }
 
         const coordinates = [parseFloat(cafeInfo.longitude), parseFloat(cafeInfo.latitude)]
-        console.log(coordinates)
+        console.log(changedCafeInfo)
 
         setBtnLoading(true);
         if (cafeInfo.image !== originalCafeInfo.image) {
@@ -181,7 +193,7 @@ const CafeProfile = () => {
                 </div>
                 <div className="flex justify-end p-3 ">
                     <PrimaryButton
-                        disabled={btnLoading || !isChanged || isAnyFieldEmpty(cafeDataIsEmpty)}
+                        disabled={btnLoading || !isChanged || isAnyFieldEmpty(cafeDataIsEmpty) || (cafeInfo.orderMethods.delivery === false && cafeInfo.orderMethods.pickUpAtCafe === false)}
                         onClick={handleSubmit}
                         className=" min-w-[192px] h-[45px]"
                     >

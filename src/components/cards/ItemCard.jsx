@@ -7,12 +7,20 @@ import { Context } from '../../context/GlobalContext';
 import { BtnLoader } from '../LoaderSpinner'
 import Modal from '../Modal'
 import ItemDetails from '../../pages/Cafe/Components/ItemDetails'
+import AlertModal from '../../components/AlertModal'
 import EventDetails from '../../pages/Cafe/Events/EventDetails'
+import { useNavigate } from 'react-router-dom'
 
 const ItemCard = ({ item , isManage, setOpenModal, handleDelete, setItemData, setOriginalItemData, deleteLoading, cafe, type}) => {
     const [openModalItem, setOpenModalItem] = useState(false)
-    const {user} = useContext(Context)
-    const isDisabled = item?.stock === 0 || getDayInfo(cafe?.workingDays || []).status === 'Closed' || item?.status === 'Not Available' || user._id === cafe?.userId?._id
+    const [openAlertModal, setOpenAlertModal] = useState(false)
+    const [btnLoading, setBtnLoading] = useState({id:null, loading:false})
+    const [alertLoading, setAlertLoading] = useState(false)
+    const {user, addToCart, isAuth, clearCart} = useContext(Context)
+    const navigate = useNavigate()
+
+    const isDisabled = item?.stock === 0 || getDayInfo(cafe?.workingDays || []).status === 'Closed' 
+    || item?.status === 'Not Available' || user._id === cafe?.userId?._id
     const isForSelling = item?.availability === 'Selling'
     const noEvents = (type !== 'events' && type !== 'event')
 
@@ -20,6 +28,17 @@ const ItemCard = ({ item , isManage, setOpenModal, handleDelete, setItemData, se
         setOpenModal(true); 
         setItemData(item); 
         setOriginalItemData(item)
+    }
+
+    const handleClick = () => {
+      addToCart(setBtnLoading, type, item, cafe, 1, setOpenAlertModal)
+    }
+
+    const handleConfirm = () => {
+      if(!isAuth)
+        return navigate('/auth/login')
+
+      clearCart(setAlertLoading, type, item, cafe, 1, setOpenAlertModal)
     }
 
     useEffect(() => {
@@ -55,8 +74,12 @@ const ItemCard = ({ item , isManage, setOpenModal, handleDelete, setItemData, se
         {!isManage &&
           <div className="flex justify-between items-center mt-4">
             {noEvents &&
-              <PrimaryButton disabled={isDisabled} className='h-[20px]'>
-                Add to Cart
+              <PrimaryButton 
+              onClick={handleClick} 
+              disabled={isDisabled || btnLoading.id === item._id} 
+              className='h-[20px] min-w-[154px]'
+              >
+                {btnLoading.id === item._id ? <BtnLoader/> : ' Add to Cart'}
               </PrimaryButton>
             }
             <button onClick={()=> setOpenModalItem(true)} className="text-xs font-bold text-primaryColor hover:underline">
@@ -86,7 +109,13 @@ const ItemCard = ({ item , isManage, setOpenModal, handleDelete, setItemData, se
           <div className="lg:w-[1350px]">
             {noEvents ? 
               (
-                <ItemDetails isDisabled={isDisabled} item={item} type={item?.title? 'book' : 'menu'} isForSelling={type? isForSelling : true}/>
+                <ItemDetails 
+                isDisabled={isDisabled} 
+                item={item} 
+                type={type} 
+                isForSelling={type === 'books'? isForSelling : true} 
+                cafe={cafe}
+                />
               )
               :
               (
@@ -97,6 +126,20 @@ const ItemCard = ({ item , isManage, setOpenModal, handleDelete, setItemData, se
         </Modal.Body>
         <Modal.Footer onClick={() => setOpenModalItem(false)}></Modal.Footer>
       </Modal>
+      <AlertModal openModal={openAlertModal} setopenModal={setOpenAlertModal} onConfirm={handleConfirm} loading={alertLoading}>
+        {isAuth &&
+        <div className='flex flex-col'>
+          <p className=" font-bold text-lg">Adding this item will clear your cart. Add anyway?</p>
+          <p className='text-gray-500 text-md'>You already have items from another cafe in your cart</p>
+        </div>
+        }
+        {!isAuth &&
+        <div className='flex flex-col'>
+          <p className=" font-bold text-lg">Please login to able to add to the cart</p>
+          <p className='text-gray-500 text-md'>You want to be redirected to the login page?</p>
+        </div>
+        }
+      </AlertModal>
     </div>
 );
 }

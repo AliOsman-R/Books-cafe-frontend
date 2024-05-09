@@ -7,6 +7,9 @@ export const cafeInitialState ={
     bio: '',
     latitude:'',
     longitude:'',
+    orderMethods:{delivery:false, pickUpAtCafe:false},
+    deliveryFee:0,
+    deliveryEst:''
   }
   
   export const userInitialState = {

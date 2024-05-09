@@ -15,7 +15,7 @@ export const sidebarUserList = [
 ];
 
 export const sidebarCafeList = [
-  { name: "Dashboard", icon: <MdDashboard />, path: "dashboard" },
+  { name: "Dashboard", icon: <MdDashboard />, path: "cafe-dashboard" },
   { name: "Cafe", icon: <CiShop />, path: "cafe-account" },
   { name: "List", icon: <CiBoxList />, path: "cafe-list" },
   { name: "Orders", icon: <PiShoppingBagOpen />, path: "cafe-orders" },

@@ -72,7 +72,7 @@ const Cafe = () => {
               <div className="flex ssm:flex-col md:flex-row gap-3">
                 <h1 className='text-[35px]'>{cafe.name}</h1>
                 <div className='flex ssm:flex-col sm:flex-row items-center gap-5'>
-                  <strong className={`${dayInfo.status === 'Open'? 'text-green-500' : 'text-red-500'} rounded-full bg-[#272727] p-1 px-4 border border-gray-200`}>
+                  <strong className={`${dayInfo.status === 'Open'? 'text-green-500' : 'text-red-500'} rounded-full bg-gray-200 [#272727] p-1 px-4 border border-gray-200`}> 
                     {dayInfo.status} 
                   </strong>
                   <span className=" text-green-600 font-semibold">{dayInfo.status === 'Open' && 'Working Hours: ' + dayInfo.workingHours}</span>

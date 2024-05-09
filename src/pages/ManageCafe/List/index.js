@@ -11,10 +11,10 @@ const CafeList = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-10">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">Welcome to the Cafe List</h1>
-        <p className="text-gray-600">Here you can manage your cafe's books, menu items, and events. Select a category below to get started.</p>
+    <div className="">
+      <div className="mb-7">
+        <h1 className="font-semibold text-2xl">Welcome to the Cafe List</h1>
+        <p className="text-gray-600 text-md">Here you can manage your cafe's books, menu items, and events. Select a category below to get started.</p>
       </div>
 
       <div className="border-b border-gray-300">
