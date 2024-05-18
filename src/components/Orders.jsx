@@ -65,7 +65,7 @@ const Orders = ({fetchUrl, cafeOwner}) => {
 
   const handleUpdateStatus = (status, orderId) => {
     status === 'cancelled'? setAlertLoading(true) : setBtnLoading({id:orderId, loading:true})
-    httpRequest.put(`/orders/update-status/${orderId}`, {status})
+    httpRequest.put(`/orders/update-status/${orderId}`, {status,cafeId:orders[0].cafeId})
     .then(({data}) => {
       console.log(data)
       const newData = orders.map(order => order._id === data.order._id ? data.order : order)
@@ -144,7 +144,7 @@ const Orders = ({fetchUrl, cafeOwner}) => {
           </div>
           }
         </div>
-        <div className="flex justify-center items-center space-x-2 my-4">
+        <div className="flex justify-center items-center space-x-2 my-4 mt-[50px]">
           <Pagination
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}

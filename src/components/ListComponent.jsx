@@ -5,6 +5,7 @@ import Filter from './Filter';
 import Search from './Search';
 import Sorting from './Sorting';
 import { setPagination } from '../utils/AppUtils';
+import { v4 as uuidv4 } from 'uuid';
 import { CgUnavailable } from 'react-icons/cg';
 import { PrimaryButton } from './buttons';
 import { Container, PrimaryInput } from './inputs';

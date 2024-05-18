@@ -1,27 +1,34 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import PageAnimationStyle from './PageAnimation'
 import { useOutletContext, useParams } from 'react-router-dom'
 import { httpRequest } from '../utils/httpsRequest'
 import { MdOutlineEmail } from "react-icons/md";
-import { AppLoader } from './LoaderSpinner'
+import { AppLoader, BtnLoader } from './LoaderSpinner'
 import { PrimaryButton, transparentBtn } from './buttons';
 import { v4 as uuidv4 } from 'uuid';
 import Progress from '../pages/ManageCafe/Orders/Progress';
 import Modal from './Modal';
 import ProgressForm from '../pages/ManageCafe/Orders/ProgressForm';
+import Rating from './Rating';
+import { Context } from '../context/GlobalContext';
+import { toast } from 'sonner';
 
 const OrderDetails = () => {
   const [pageLoading, setPageLoading] = useState(false);
+  const [btnLoading, setBtnLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [progress, setProgress] = useState([])
+  const [selectedProduct, setSelectedProduct] = useState(null)
+  const [review, setReview] = useState({comment:'', rating:5})
   const [order, setOrder] = useState({})
+  const {user} = useContext(Context)
   const {id} = useParams()
   const {cafeOwner, setOrders} = useOutletContext()
   const sstRate = 0.06;
   const date = order.createdAt?.substring(0, 10)
   const status = order?.status?.charAt(0).toUpperCase() + order?.status?.slice(1).toLowerCase()
   const statusColor = order?.status === 'pending' || order?.status === 'cancelled'? 'bg-red-400' : 'bg-green-400'
-  const isComplete = order?.status === 'completed'
+  const isComplete = order?.status === 'completed' && !cafeOwner 
 
   useEffect(() => {
     setPageLoading(true)
@@ -36,6 +43,41 @@ const OrderDetails = () => {
     }).finally(() => {setPageLoading(false)})
   }, [id])
 
+  useEffect(() => {
+    setReview({comment:'', rating:5})
+  }, [selectedProduct])
+
+  const handleBtnClick = (product) => {
+    setSelectedProduct(product)
+    setOpenModal(true)
+  }
+
+  const handlePost = () => {
+    const reviewableId = selectedProduct?.productId? selectedProduct.productId : order.cafeId._id
+    const reviewableType = selectedProduct?.productId?  selectedProduct.type : 'cafe'
+    const productName = selectedProduct?.productId?  selectedProduct.item.name || selectedProduct.item.title : order.cafeId.name
+    const reviewData = {
+      ...review,
+      userId:user._id,
+      cafeId:order.cafeId._id,
+      reviewableId,
+      reviewableType,
+      productName
+    }
+    setBtnLoading(true)
+    httpRequest.post(`/reviews/${order._id}`, reviewData)
+    .then(({data}) => {
+      console.log(data)
+      setOpenModal(false)
+      toast.success(data.message)
+    })
+    .catch((err) => {
+      console.log(err)
+      toast.error(err.response.data.message)
+    }).finally(() => {setBtnLoading(false); setReview({comment:'', rating:5})})
+  }
+
+  console.log(selectedProduct)
 
   return (
     <PageAnimationStyle>
@@ -74,7 +116,7 @@ const OrderDetails = () => {
                         <div className="flex items-center gap-2">
                           <span className='font-semibold'>{product.item.name || product.item.title}</span>
                           {isComplete &&
-                          <button 
+                          <button onClick={() => handleBtnClick(product)}
                           className={` bg-primaryColor h-[20px] py-3 px-7 flex items-center rounded-[5px] hover:bg-primaryColorHover text-white`}
                           >
                             Rate
@@ -134,7 +176,7 @@ const OrderDetails = () => {
               {isComplete &&
               <div className="flex items-center gap-4 mt-10 p-2 ">
                 <h1 className='text-lg font-semibold'>Rate the cafe</h1>
-                <button 
+                <button onClick={() => handleBtnClick('The Cafe and Service')}
                 className={` bg-primaryColor h-[20px] py-3 px-7 flex items-center rounded-[5px] hover:bg-primaryColorHover text-white`}
                 >
                   Rate
@@ -181,15 +223,21 @@ const OrderDetails = () => {
                 </div>
             </div>
             <div className="flex-2 w-[30%]">
-              {/* <Modal setOpenModal={setOpenModal} $isOpen={openModal}>
-                <Modal.Header setOpenModal={setOpenModal}>Manage Order Status</Modal.Header>
+              <Modal setOpenModal={setOpenModal} $isOpen={openModal}>
+                <Modal.Header setOpenModal={setOpenModal}>
+                  Rate {selectedProduct?._id? selectedProduct.item.name || selectedProduct.item.title : selectedProduct }
+                </Modal.Header>
                 <Modal.Body>
-                  <div className="w-[1114px]"> */}
-                    
-                  {/* </div>
+                  <div className="w-[1114px]"> 
+                    <Rating selectedProduct={selectedProduct} setReview={setReview} review={review}/>
+                  </div>
                 </Modal.Body>
-                <Modal.Footer onClick={() => setOpenModal(false)}></Modal.Footer>
-              </Modal> */}
+                <Modal.Footer onClick={() => setOpenModal(false)}>
+                  <PrimaryButton className='h-[38px]' disabled={review.rating === 0 || btnLoading} onClick={handlePost}>
+                    {btnLoading ? <BtnLoader /> : "Post"}
+                  </PrimaryButton>
+                </Modal.Footer>
+              </Modal> 
             </div>
           </div>
         </div>

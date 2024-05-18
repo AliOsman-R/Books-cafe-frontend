@@ -1,14 +1,15 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { PrimaryButton, TertiaryButton } from '../../../components/buttons';
 import { TextareaInput } from '../../../components/inputs';
 import Reviews from '../../../components/Reviews';
-import { sampleReviews } from '../../../data/data';
+// import { sampleReviews } from '../../../data/data';
 import StarRating from '../../../components/StarRating';
 import { Context } from '../../../context/GlobalContext';
 import { toast } from 'sonner';
 import { BtnLoader } from '../../../components/LoaderSpinner';
 import AlertModal from '../../../components/AlertModal';
 import { useNavigate } from 'react-router-dom';
+import { httpRequest } from '../../../utils/httpsRequest';
 
 const ItemDetails = ({ item, type, isDisabled , isForSelling, cafe }) => {
   const [reviewLoading, setReviewLoading] = useState(false)
@@ -25,23 +26,23 @@ const ItemDetails = ({ item, type, isDisabled , isForSelling, cafe }) => {
   const isItBook = type === 'books'
   const incrReduBtn = `border px-4 py-2 border-gray-500 ${item.stock === 0? 'cursor-auto' : 'cursor-pointer'}`
 
-    // useEffect(() => {
-    // setReviewLoading(true)
-    //  httpRequest.get(`/review/${item._id}`)
-    //  .then(({data}) => {
-    //   console.log(data)
-    //   setReviews(data.reviews)
-    //  })
-    //  .catch((err) => {
-    //   console.log(err)
-    //  }).finally(() => {setReviewLoading(false)})
-    // }, [item]);
+    useEffect(() => {
+    setReviewLoading(true)
+     httpRequest.get(`/reviews/${item._id}`)
+     .then(({data}) => {
+      console.log(data)
+      setReviews(data.reviews)
+     })
+     .catch((err) => {
+      console.log(err)
+     }).finally(() => {setReviewLoading(false)})
+    }, [item]);
 
-  // const handleQuantityChange = (e) => {
-  //   const value = parseInt(e.target.value);
-  //   if (value < 0 || value > item.stock) return;
-  //   setQuantity(value);
-  // };
+  const handleQuantityChange = (e) => {
+    const value = parseInt(e.target.value);
+    if (value < 0 || value > item.stock) return;
+    setQuantity(value);
+  };
 
   const handleReduce = () => {
     if (quantity === 1 || item.stock === 0 ) return;
@@ -96,7 +97,7 @@ const ItemDetails = ({ item, type, isDisabled , isForSelling, cafe }) => {
                 <h1 className="text-3xl font-semibold">{item.title || item.name}</h1>
                 <div className="flex items-center gap-1">
                   <StarRating rating={item.averageRating} />
-                  <span className='text-gray-400'>(0 Reviews) ({item.sold} sold)</span>
+                  <span className='text-gray-400'>({item?.numOfReviews} Reviews) ({item.sold} sold)</span>
                 </div>
               </div>
               <h2 className="text-xl font-semibold mb-4">Details:</h2>
@@ -178,7 +179,7 @@ const ItemDetails = ({ item, type, isDisabled , isForSelling, cafe }) => {
         </div> */}
 
         {/* Reviews Section */}
-        <Reviews reviews={sampleReviews} />
+        <Reviews reviews={reviews} />
       </div>
 
       <AlertModal openModal={openAlertModal} setopenModal={setOpenAlertModal} onConfirm={handleConfirm} loading={alertLoading}>

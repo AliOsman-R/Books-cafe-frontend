@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import Sidebar from "../../components/Sidebar";
+import Sidebar from "../components/Sidebar";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx";
-import CafeSwitch from "../ManageCafe/Account/CafeSwitch";
-import { Context } from "../../context/GlobalContext";
+import CafeSwitch from "./ManageCafe/Account/CafeSwitch";
+import { Context } from "../context/GlobalContext";
 
 const Profile = ({}) => {
   const [menu, setMenu] = useState(false);

@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Context } from '../context/GlobalContext';
 import { MdArrowDropDown } from 'react-icons/md';
 // import { CgProfile } from 'react-icons/cg';
+import { MdOutlineDashboard } from "react-icons/md";
 import { v4 as uuidv4 } from 'uuid';
 import { sidebarUserList } from '../data/data';
 import { Link, useNavigate } from 'react-router-dom';
@@ -84,9 +85,9 @@ const DropDownMenu = () => {
                     ))}
                     {user.role === 'owner'&& (
                         <div className="flex flex-col" key={uuidv4()}>
-                            <Link to={`/user/profile/manage-cafe/cafe-account`} className={`${linkStyle}`}>
-                                <span className=' bg-gray-200 rounded-full p-2'><CiShop/></span>
-                                <p className='w-full'>My Cafe</p>
+                            <Link to={`/user/profile/manage-cafe/cafe-dashboard`} className={`${linkStyle}`}>
+                                <span className=' bg-gray-200 rounded-full p-2'><MdOutlineDashboard/></span>
+                                <p className='w-full'>Dashboard</p>
                                 <MdKeyboardArrowRight className={`${arrowStyle}`} size={30}/>
                             </Link>
                         </div>

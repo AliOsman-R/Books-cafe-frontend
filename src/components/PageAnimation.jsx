@@ -23,7 +23,7 @@ const PageAnimationStyle = styled.div`
   height: 100%;
   background-color: white;
   animation: ${slideInOut} 0.5s ease-in-out;
-  z-index: 1100;
+  z-index: 110000;
   overflow-y: auto;
 `
 

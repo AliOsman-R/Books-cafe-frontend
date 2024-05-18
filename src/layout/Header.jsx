@@ -33,7 +33,7 @@ const Header = () => {
 
 
   return (
-    <header className={`z-[1000] h-[83px] flex lg:flex-row justify-between item-center lg:px-10 fixed w-full top-0 left-0 ${activeNavStyle}`}>
+    <header className={`z-[10000] h-[83px] flex lg:flex-row justify-between item-center lg:px-10 fixed w-full top-0 left-0 ${activeNavStyle}`}>
       <div className="p-[8px] items-center text-[40px] text-white font-bold cursor-pointer flex">
         <PiBooksLight />
         <Link className="" to={"/"}>

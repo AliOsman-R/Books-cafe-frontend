@@ -14,12 +14,12 @@ import SignUp from "./pages/SignUp-Login-Auth/SignUp";
 import { useEffect } from "react";
 import NotFound from "./pages/NotFound";
 import VerifyEmail from "./pages/SignUp-Login-Auth/VerifyEmail";
-import Profile from "./pages/Profile/index";
+import Profile from "./pages/Profile";
 import ResetPass from "./pages/SignUp-Login-Auth/ForgotPass/ResetPass";
 import ForgotPass from "./pages/SignUp-Login-Auth/ForgotPass/ForgotPass";
-import UserAccount from "./pages/Profile/Account/index";
-// import Orders from "./pages/Profile/Orders/Orders";
-import Reviews from "./pages/Profile/Reviews";
+import UserAccount from "./pages/ManageUser/Account/index";
+// import Orders from "./pages/ManageUser/Orders/Orders";
+import UserReviews from "./pages/ManageUser/Reviews/";
 import Cart from "./pages/Cart/";
 import Cafes from "./pages/Cafes";
 import Cafe from "./pages/Cafe/index";
@@ -28,11 +28,11 @@ import CafeList from "./pages/ManageCafe/List/index";
 import Events from "./pages/Events";
 import CheckOut from "./pages/Cart/CheckOut";
 import Success from "./pages/Cart/Success";
-import UserOrders from "./pages/Profile/Orders";
+import UserOrders from "./pages/ManageUser/Orders";
 import CafeOrders from "./pages/ManageCafe/Orders";
 import OrderDetails from "./components/OrderDetails";
 import Dashboard from "./pages/ManageCafe/Dashboard/Dashboard";
-import CafeReviews from "./pages/ManageCafe/Reviews/CafeReviews";
+import CafeReviews from "./pages/ManageCafe/Reviews/";
 
 function App() {
   return (
@@ -56,7 +56,7 @@ function App() {
                   <Route path="orders" element={<UserOrders />} >
                     <Route path=":id" element={<OrderDetails/>}/>
                   </Route>
-                  <Route path="reviews" element={<Reviews />} />
+                  <Route path="reviews" element={<UserReviews />} />
                 </Route>
                 <Route path="manage-cafe">
                   <Route path="cafe-dashboard" element={<Dashboard />} />

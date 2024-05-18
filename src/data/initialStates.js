@@ -1,3 +1,8 @@
+import { BiCart } from 'react-icons/bi';
+import { MdOutlinePointOfSale } from "react-icons/md";
+import { MdOutlineInventory2 } from "react-icons/md";
+import { RiMoneyDollarCircleLine } from "react-icons/ri";
+
 export const cafeInitialState ={
     name: '',
     phoneNumber: '',
@@ -58,3 +63,37 @@ export const cafeInitialState ={
     images: [],
   }
 
+  export const topDashboardInitialState = [
+    {
+      icon:<BiCart size={40}/>,
+      mainText:'Orders Received',
+      mainData:0,
+      secondaryText:'Orders Compeleted',
+      secondaryData:0,
+      mainColor:'bg-gradient-to-r from-blue-500 to-blue-400'
+    },
+    {
+      icon:<MdOutlinePointOfSale size={40}/>,
+      mainText:'Total Sales',
+      mainData:0,
+      secondaryText:'This Month',
+      secondaryData:0,
+      mainColor:'bg-gradient-to-r from-green-500 to-green-400'
+    },
+    {
+      icon:<MdOutlineInventory2 size={40}/>,
+      mainText:'Inventory',
+      mainData:0,
+      secondaryText:'Books: 0',
+      secondaryData:'Menu: 0',
+      mainColor:'bg-gradient-to-r from-red-500 to-red-400'
+    },
+    {
+      icon:<RiMoneyDollarCircleLine size={40}/>,
+      mainText:'Total Revenue',
+      mainData:0 + ' RM',
+      secondaryText:'This Month',
+      secondaryData:0 + ' RM',
+      mainColor:'bg-gradient-to-r from-orange-500 to-orange-400'
+    },
+  ]

@@ -81,10 +81,11 @@ const Cafe = () => {
               <span>+{cafe.phoneNumber}</span>
               <span className="text-sm text-gray-600">{cafe.state}, {cafe.city}</span>
               <div className="flex items-center gap-2">
-                <span>900 Sales</span> 
+                <span>{cafe?.sales? cafe.sales : 0} Sales</span> 
                 <span className=" text-gray-200">|</span>
-                <div className="flex items-center">
+                <div className="flex items-center gap-1">
                   <StarRating rating={cafe.averageRating} />
+                  <span className='text-gray-400'>({cafe?.numOfReviews} Reviews)</span>
               </div>
               </div>
             </div>

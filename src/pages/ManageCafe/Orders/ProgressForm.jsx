@@ -101,7 +101,7 @@ const ProgressForm = ({ progress, id, setProgress, setOrders, setOrder }) => {
     })
   }
 
-  const today = new Date().toISOString().split('T')[0];
+  // const today = new Date().toISOString().split('T')[0];
 
   return (
     <div>
@@ -135,7 +135,7 @@ const ProgressForm = ({ progress, id, setProgress, setOrders, setOrder }) => {
           type="date"
           name="date"
           value={date}
-          min={today} 
+          // min={today} 
           onChange={handleInputChange}
           className="p-2 rounded focus:outline-none focus:ring focus:border-primaryColor"
         />
