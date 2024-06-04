@@ -1,13 +1,15 @@
 import { createContext, useState, useEffect } from "react";
 import { httpRequest } from "../utils/httpsRequest";
-import { toast } from "sonner";
+import { io } from "socket.io-client";
 
 export const Context = createContext({});
-
 export default function GlobalContext() {
   const [loading, setLoading] = useState(true);
+  const [adminLoading, setAdminLoading] = useState(true);
   const [user, setUser] = useState({});
   const [isAuth, setIsAuth] = useState(false);
+  const [admin, setAdmin] = useState({});
+  const [isAdminAuth, setIsAdminAuth] = useState(false);
   const [pageLoading, setPageLoading] = useState(false);
   const [deliveryFee, setDeliveryFee] = useState(0);
   const [orderOpt, setOrderOpt] = useState('delivery');
@@ -16,6 +18,10 @@ export default function GlobalContext() {
   const [cartItems, setCartItems] = useState([]);
   const [maxDistance, setMaxDistance] = useState(1200)
   const [selectedCafe, setSelectedCafe] = useState({});
+  const [selectedUserId, setSelectedUserId] = useState(null)
+  const [messages, setMessages] = useState([])
+  const [socket, setSocket] = useState(null);
+	const [onlineUsers, setOnlineUsers] = useState([]);
 
   const actions = (action) => {
     const { type, payload } = action;
@@ -27,6 +33,10 @@ export default function GlobalContext() {
         return setUser(payload);
       case "SET_IS_AUTH":
         return setIsAuth(payload);
+      case "SET_ADMIN":
+        return setAdmin(payload);
+      case "SET_IS_ADMIN_AUTH":
+        return setIsAdminAuth(payload);
       case "SET_SELECED_CAFE":
         return setSelectedCafe(payload);
       case "SET_MAX_DISTANCE":
@@ -41,90 +51,14 @@ export default function GlobalContext() {
         return setCompletedOrder(payload); 
       case "SET_SPECIAL_REQUEST":
         return setSpecialRequest(payload);
+      case "SET_SELECTED_USER_ID":
+        return setSelectedUserId(payload);
+      case "SET_MESSAGES":
+        return setMessages(payload);
       default:
         return loading;
     }
   };
-
-  const addToCart = (setBtnLoading, type, item, cafe, quantity, setOpenAlertModal) => {
-    const existingItem = cartItems.find(cartItem => cartItem._id === item._id);
-
-    if(!isAuth){
-      setOpenAlertModal(true)
-      return ''; 
-    }
-
-    if(cartItems.length > 0 && cartItems[0].cafeId._id !== item.cafeId._id) {
-      setOpenAlertModal(true)
-      return '';
-    }
-
-    if (existingItem) {
-      const updatedQuantity = existingItem.quantity + quantity;
-      if (updatedQuantity > item.stock) {
-        toast.error(`Maximum stock reached for ${item.name || item.title}`);
-        return; 
-      }
-      const updatedItems = cartItems.map(cartItem =>
-        cartItem._id === existingItem._id ? { ...cartItem, quantity: updatedQuantity } : cartItem
-      );
-      httpRequest.put(`/cart/${item._id}`, {quantity:updatedQuantity})
-      .then(({data}) => {
-        setCartItems( updatedItems )
-        toast.success(`${quantity} ${item.name || item.title} added to the cart`);
-      })
-      .catch((err) => {
-        console.log(err)
-        toast.error(`Something went wrong please try again later`);
-      }).finally(() => {setBtnLoading({id:null, loading:false})})
-      
-    } else {
-      const cartData = {
-        userId:user._id,
-        cafeId:cafe._id,
-        type,
-        productName:item.name || item.title,
-        quantity
-      }
-      setBtnLoading({id:item._id, loading:true})
-      httpRequest.post(`/cart/${item._id}`, cartData)
-      .then(({data}) => {
-        setCartItems([...cartItems, { ...item, quantity }])
-        toast.success(`${quantity} ${item.name || item.title} added to the cart`);
-      })
-      .catch((err) => {
-        console.log(err)
-        toast.error(`Something went wrong please try again later`);
-      }).finally(() => {setBtnLoading({id:null, loading:false})})
-      }
-  }
-
-  const clearCart = (setAlertLoading , type, item, cafe, quantity, setOpenAlertModal) => {
-    setAlertLoading(true)
-    httpRequest.delete(`/cart/clear/${user._id}`)
-    .then(({data}) => {
-        const cartData = {
-          userId:user._id,
-          cafeId:cafe._id,
-          type,
-          productName:item.name || item.title,
-          quantity
-        }
-        httpRequest.post(`/cart/${item._id}`, cartData)
-        .then(({data}) => {
-          setCartItems([{ ...item, quantity }])
-          toast.success(`${quantity} ${item.name || item.title} added to the cart`);
-        })
-        .catch((err) => {
-          console.log(err)
-          toast.error(`Something went wrong please try again later`);
-        })
-    })
-    .catch((err) => {
-      console.log(err)
-      toast.error(`Something went wrong please try again later`);
-    }).finally(() => {setAlertLoading(false); setOpenAlertModal(false)})
-  }
 
   useEffect(() => {
     if(user._id)
@@ -161,13 +95,57 @@ export default function GlobalContext() {
       });
   }, []);
 
+  useEffect(() => {
+    httpRequest
+      .get("/admin/is-admin-auth")
+      .then((res) => {
+        console.log(res.data)
+        if (res.data.adminAuth) {
+          setAdmin(res.data.admin);
+        }
+        setIsAdminAuth(res.data.adminAuth);
+        console.log("res: ", res);
+      })
+      .catch((err) => {
+        setAdmin({});
+        setIsAdminAuth(false);
+        console.log(err);
+      })
+      .finally(() => {
+        setAdminLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+		if (user) {
+			const socket = io("http://localhost:5000", {
+				query: {
+					userId: user._id,
+				},
+			});
+
+			setSocket(socket);
+
+			socket.on("getOnlineUsers", (users) => {
+				setOnlineUsers(users);
+			});
+
+			return () => socket.close();
+		} else {
+			if (socket) {
+				socket.close();
+				setSocket(null);
+			}
+		}
+	}, [user]);
+
   return { 
     actions, 
-    addToCart, 
-    clearCart, 
     loading, 
     user, 
     isAuth, 
+    admin,
+    isAdminAuth,
     selectedCafe, 
     maxDistance, 
     cartItems, 
@@ -175,6 +153,11 @@ export default function GlobalContext() {
     deliveryFee, 
     orderOpt, 
     completedOrder,
-    specialRequest
+    specialRequest,
+    selectedUserId,
+    adminLoading,
+    messages,
+    socket,
+    onlineUsers
   };
 }

@@ -18,7 +18,6 @@ import Profile from "./pages/Profile";
 import ResetPass from "./pages/SignUp-Login-Auth/ForgotPass/ResetPass";
 import ForgotPass from "./pages/SignUp-Login-Auth/ForgotPass/ForgotPass";
 import UserAccount from "./pages/ManageUser/Account/index";
-// import Orders from "./pages/ManageUser/Orders/Orders";
 import UserReviews from "./pages/ManageUser/Reviews/";
 import Cart from "./pages/Cart/";
 import Cafes from "./pages/Cafes";
@@ -33,14 +32,20 @@ import CafeOrders from "./pages/ManageCafe/Orders";
 import OrderDetails from "./components/OrderDetails";
 import Dashboard from "./pages/ManageCafe/Dashboard/Dashboard";
 import CafeReviews from "./pages/ManageCafe/Reviews/";
+import AdminLogin from "./pages/Admin/AdminLogin";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
+import Chat from "./pages/Chat/";
 
 function App() {
   return (
     <Router>
-      <Wrapper>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route element={<OutletComp />}>
+          <Route element={<WrapperWithOutlet />}>
+            <Route path="/admin" >
+              <Route path="login" element={<AdminLogin />} />
+              <Route path="dashboard" element={<AdminDashboard />} />
+            </Route>
+            <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/events" element={<Events />} />
             <Route path="/auth">
@@ -57,6 +62,7 @@ function App() {
                     <Route path=":id" element={<OrderDetails/>}/>
                   </Route>
                   <Route path="reviews" element={<UserReviews />} />
+                  <Route path="chat" element={<Chat />} />
                 </Route>
                 <Route path="manage-cafe">
                   <Route path="cafe-dashboard" element={<Dashboard />} />
@@ -79,12 +85,11 @@ function App() {
             <Route path="/*" element={<NotFound />} />
           </Route>
         </Routes>
-      </Wrapper>
     </Router>
   );
 }
 
-const OutletComp = () => {
+const WrapperWithOutlet = () => {
   const location = useLocation();
 
   useEffect(() => {
@@ -93,8 +98,10 @@ const OutletComp = () => {
 
   return (
     <>
-      <div className="h-[83px]" />
-      <Outlet />
+      <Wrapper>
+        {location.pathname !== '/' && <div className="h-[83px]" />}
+        <Outlet />
+      </Wrapper>
     </>
   );
 };

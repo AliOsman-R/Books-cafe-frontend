@@ -19,7 +19,6 @@ const Home = () => {
   const isData = sortedCafes.length > 0;
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     httpRequest.get('/cafe/')
     .then(({data}) => {
       console.log(data)

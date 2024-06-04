@@ -24,6 +24,7 @@ const CafeProfile = () => {
     const isChanged = isCafeInfoChanged(cafeInfo, originalCafeInfo, workingDays)
     const {name, phoneNumber, city, address, bio, latitude, longitude} = cafeInfo
     const cafeDataIsEmpty = {name, phoneNumber, city, address, bio, latitude, longitude}
+    console.log(cafeInfo)
 
     useEffect(() => {
     httpRequest.get(`/cafe/user-cafe/${user._id}`)

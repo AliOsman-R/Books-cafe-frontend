@@ -11,11 +11,15 @@ import { BtnLoader } from "../components/LoaderSpinner";
 import { sidebarCafeList, sidebarUserList } from "../data/data";
 import { ToggleSwitch } from "./ToggleSwitch ";
 import { AiOutlineClose } from "react-icons/ai";
+import AlertModal from "./AlertModal";
+import useSwitch from "../hooks/useSwitch";
 
 const Sidebar = ({setMenu, setOpenModal, openModal}) => {
   const [btnLoading, setBtnLoading] = useState(false);
   const [toggle, setToggle] = useState(false);
+  const [openAlertModal, setOpenAlertModal] = useState(false)
   const { user, actions } = useContext(Context);
+  const {handleSwitchToCustomer, handleSwitchToExistentCafe, alertLoading} = useSwitch()
   const navigate = useNavigate();
   const location = useLocation();
   const activePage = location.pathname.split("/")[4];
@@ -23,7 +27,13 @@ const Sidebar = ({setMenu, setOpenModal, openModal}) => {
 
   const handleToggle = (e) => {
     setToggle(!toggle);
-    if (!toggle) setOpenModal(true);
+    if (!toggle && !isOwner && !user.cafeId) setOpenModal(true);
+
+    if(isOwner)
+    setOpenAlertModal(true)
+
+    if(!isOwner && user.cafeId)
+    handleSwitchToExistentCafe(setToggle)
   };
 
   useEffect(() => {
@@ -124,6 +134,7 @@ const Sidebar = ({setMenu, setOpenModal, openModal}) => {
            <ToggleSwitch
             checked={toggle}
             onChange={handleToggle}
+            alertLoading={alertLoading}
             name='switch-to-cafe'
             isOwner={isOwner}
             />
@@ -140,6 +151,15 @@ const Sidebar = ({setMenu, setOpenModal, openModal}) => {
           </button>
         </div>
       </div>
+      <AlertModal 
+        openModal={openAlertModal} 
+        setopenModal={setOpenAlertModal} 
+        onConfirm={() => handleSwitchToCustomer(setToggle, setOpenAlertModal)} 
+        loading={alertLoading}
+        >
+            <p className=" font-bold text-lg">Are you sure you want to switch back to customer?</p>
+            <p className='text-gray-500 text-md'>The cafe data will be stored to switch back.</p>
+      </AlertModal>
     </div>
   );
 };

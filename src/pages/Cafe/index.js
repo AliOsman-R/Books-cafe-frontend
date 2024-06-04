@@ -4,7 +4,7 @@ import PageAnimation from "../../components/PageAnimation";
 import { httpRequest } from "../../utils/httpsRequest";
 import { FaMapLocationDot } from "react-icons/fa6";
 import { TiMessages } from "react-icons/ti";
-import { Navigate, useLocation, useParams } from "react-router-dom";
+import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
 import { MdDescription } from "react-icons/md";
 import { AppLoader } from "../../components/LoaderSpinner";
 import defaultCafeImage from '../../assets/default-cafe-image.jpg';
@@ -17,38 +17,27 @@ import Events from "./Events/";
 import WorkingDaysPage from "./WorkingDaysPage";
 import StarRating from "../../components/StarRating";
 import { Context } from "../../context/GlobalContext";
+import { toast } from "sonner";
 
 const tabs = ['Books', 'Menu', 'Events', 'Working Days'];
 const Cafe = () => {
   const { id } = useParams();
   const [cafe, setCafe] = useState(cafeInitialState);
-  // const [pageLoading, setPageLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const dayInfo = getDayInfo(cafe?.workingDays || []);
-  const {selectedCafe} = useContext(Context);
-  console.log(selectedCafe)
+  const {selectedCafe, actions, user} = useContext(Context);
+  const navigate = useNavigate()
+  console.log(cafe)
 
   useEffect(() => {
     setCafe(selectedCafe)
-    // setPageLoading(true)
-    //  httpRequest.get(`/cafe/${id}`)
-    //  .then(({data}) => {
-    //    setCafe(data.cafe);
-    //  }).catch(err => {
-    //   console.log(err)
-    //  }).finally(() => setPageLoading(false))
-
   }, [selectedCafe]);
 
-  // if(pageLoading)  {
-  //   return (
-  //     <PageAnimation>
-  //       <div className="flex justify-center items-center h-screen">
-  //         <AppLoader/>
-  //       </div>
-  //     </PageAnimation>
-  //   )
-  // }  
+  const handleClick = () => {
+    if(user._id === cafe.userId._id) return  toast.error("You cant contact yourself")
+    actions({type:'SET_SELECTED_USER_ID', payload:cafe.userId._id})
+    navigate('/user/profile/manage-user/chat')
+  }
   
   if(Object.keys(selectedCafe).length === 0)
   {
@@ -94,7 +83,7 @@ const Cafe = () => {
             <div className="flex flex-col items-center gap-2">
               <img src={cafe.ownerImage || defaultUserImage} className="rounded-full object-cover size-[70px] shadow-lg"/>
               <h1>{cafe.ownerName}</h1>
-              <div className="flex items-center gap-2 hover:bg-[#cacaca] py-2 px-4 rounded-full cursor-pointer">
+              <div onClick={handleClick} className="flex items-center gap-2 hover:bg-[#cacaca] py-2 px-4 rounded-full cursor-pointer">
                 <TiMessages/>
                 <span>Contact</span>
               </div>

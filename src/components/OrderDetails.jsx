@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import PageAnimationStyle from './PageAnimation'
-import { useOutletContext, useParams } from 'react-router-dom'
+import { useNavigate, useOutletContext, useParams } from 'react-router-dom'
 import { httpRequest } from '../utils/httpsRequest'
 import { MdOutlineEmail } from "react-icons/md";
 import { AppLoader, BtnLoader } from './LoaderSpinner'
@@ -12,6 +12,7 @@ import ProgressForm from '../pages/ManageCafe/Orders/ProgressForm';
 import Rating from './Rating';
 import { Context } from '../context/GlobalContext';
 import { toast } from 'sonner';
+import { IoCheckmarkDoneCircleOutline } from 'react-icons/io5';
 
 const OrderDetails = () => {
   const [pageLoading, setPageLoading] = useState(false);
@@ -21,8 +22,9 @@ const OrderDetails = () => {
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [review, setReview] = useState({comment:'', rating:5})
   const [order, setOrder] = useState({})
-  const {user} = useContext(Context)
+  const {user, actions} = useContext(Context)
   const {id} = useParams()
+  const navigate = useNavigate()
   const {cafeOwner, setOrders} = useOutletContext()
   const sstRate = 0.06;
   const date = order.createdAt?.substring(0, 10)
@@ -52,6 +54,16 @@ const OrderDetails = () => {
     setOpenModal(true)
   }
 
+  const handleClick = () => {
+    if(cafeOwner){
+      actions({type:'SET_SELECTED_USER_ID', payload:order.userId._id})
+      navigate('/user/profile/manage-user/chat')
+    }else{
+      actions({type:'SET_SELECTED_USER_ID', payload:order.cafeId.userId})
+      navigate('/user/profile/manage-user/chat')
+    }
+  }
+
   const handlePost = () => {
     const reviewableId = selectedProduct?.productId? selectedProduct.productId : order.cafeId._id
     const reviewableType = selectedProduct?.productId?  selectedProduct.type : 'cafe'
@@ -77,8 +89,6 @@ const OrderDetails = () => {
     }).finally(() => {setBtnLoading(false); setReview({comment:'', rating:5})})
   }
 
-  console.log(selectedProduct)
-
   return (
     <PageAnimationStyle>
       {pageLoading? (
@@ -89,6 +99,12 @@ const OrderDetails = () => {
         <div className='m-10 flex flex-col gap-10'>
           <div className="flex justify-between items-center">
             <h1 className='text-2xl font-bold'>Order Details</h1>
+            {order.status === 'cancelled' && (
+              <div className="text-xl font-bold flex gap-2 items-center">
+               <IoCheckmarkDoneCircleOutline size={30} color='green'/> 
+               <p>You will receive a full refund within 14 working days</p>
+              </div>
+            )}
           </div>
           <div className="flex flex-grow gap-5">
             <div className="flex-1 bg-gray-50 min-h-[50vh] shadow-lg rounded-md p-5">
@@ -98,7 +114,7 @@ const OrderDetails = () => {
                   <span className="text-gray-500">Placed on {date}</span>
                 </div>
                 <div className="flex gap-3">
-                  <button className={`flex items-center gap-2 ${transparentBtn} px-5 hover:bg-gray-200`}>
+                  <button onClick={handleClick} className={`flex items-center gap-2 ${transparentBtn} px-5 hover:bg-gray-200`}>
                     <span><MdOutlineEmail size={20}/></span>
                     Message {cafeOwner? 'Customer' : 'Cafe'}
                   </button>

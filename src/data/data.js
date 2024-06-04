@@ -6,12 +6,14 @@ import { PiShoppingBagOpen } from "react-icons/pi";
 import { CiBoxList } from "react-icons/ci";
 import { GoCodeReview } from "react-icons/go";
 import { CiShop } from "react-icons/ci";
+import { BiChat } from "react-icons/bi";
 
 
 export const sidebarUserList = [
   { name: "My Profile", icon: <GoPerson />, path: "user-account" },
   { name: "My Orders", icon: <AiOutlineShopping />, path: "orders" },
   { name: "My Reviews", icon: <MdOutlineRateReview />, path: "reviews" },
+  { name: "My Chat", icon: <BiChat />, path: "chat" },
 ];
 
 export const sidebarCafeList = [

@@ -68,7 +68,7 @@ const DropDownMenu = () => {
                 {openedMenu?<MdArrowDropDown size={20}/> : <MdArrowDropUp size={20}/>}
             </div>
         </div>
-        <div ref={menuRef} className={`absolute top-full right-[65px]  mt-2 min-w-[250px] shadow-lg  max-h-0 z-[1000] overflow-hidden transition-max-height duration-500 ${openedMenu ? 'max-h-[300px]' : ''}`}>
+        <div ref={menuRef} className={`absolute top-full right-[65px]  mt-2 min-w-[250px] shadow-lg  max-h-0 z-[1000] overflow-hidden transition-max-height duration-500 ${openedMenu ? 'max-h-[400px]' : ''}`}>
             <div className="bg-white p-3 rounded-sm border border-gray-200 text-black">
                 <div className="flex items-center justify-center gap-3 p-3 border-b border-gray-400">
                     <h1>Profile Settings</h1>

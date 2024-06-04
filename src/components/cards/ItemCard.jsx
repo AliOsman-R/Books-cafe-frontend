@@ -10,13 +10,17 @@ import ItemDetails from '../../pages/Cafe/Components/ItemDetails'
 import AlertModal from '../../components/AlertModal'
 import EventDetails from '../../pages/Cafe/Events/EventDetails'
 import { useNavigate } from 'react-router-dom'
+import useAddToCart from '../../hooks/useAddToCart'
+import useClearCart from '../../hooks/useClearCart'
 
 const ItemCard = ({ item , isManage, setOpenModal, handleDelete, setItemData, setOriginalItemData, deleteLoading, cafe, type}) => {
     const [openModalItem, setOpenModalItem] = useState(false)
     const [openAlertModal, setOpenAlertModal] = useState(false)
     const [btnLoading, setBtnLoading] = useState({id:null, loading:false})
     const [alertLoading, setAlertLoading] = useState(false)
-    const {user, addToCart, isAuth, clearCart} = useContext(Context)
+    const {user, isAuth} = useContext(Context)
+    const {addToCart} = useAddToCart()
+    const {clearCart} = useClearCart()
     const navigate = useNavigate()
 
     const isDisabled = item?.stock === 0 || getDayInfo(cafe?.workingDays || []).status === 'Closed' 

@@ -1,15 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { PrimaryButton, TertiaryButton } from '../../../components/buttons';
-import { TextareaInput } from '../../../components/inputs';
 import Reviews from '../../../components/Reviews';
-// import { sampleReviews } from '../../../data/data';
 import StarRating from '../../../components/StarRating';
 import { Context } from '../../../context/GlobalContext';
-import { toast } from 'sonner';
 import { BtnLoader } from '../../../components/LoaderSpinner';
 import AlertModal from '../../../components/AlertModal';
 import { useNavigate } from 'react-router-dom';
 import { httpRequest } from '../../../utils/httpsRequest';
+import useAddToCart from '../../../hooks/useAddToCart';
+import useClearCart from '../../../hooks/useClearCart';
 
 const ItemDetails = ({ item, type, isDisabled , isForSelling, cafe }) => {
   const [reviewLoading, setReviewLoading] = useState(false)
@@ -21,7 +20,9 @@ const ItemDetails = ({ item, type, isDisabled , isForSelling, cafe }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [btnLoading, setBtnLoading] = useState({id:null, loading:false})
   const [alertLoading, setAlertLoading] = useState(false)
-  const {addToCart, isAuth, clearCart} = useContext(Context)
+  const {isAuth} = useContext(Context)
+  const {addToCart} = useAddToCart()
+  const {clearCart} = useClearCart()
   const navigate = useNavigate()
   const isItBook = type === 'books'
   const incrReduBtn = `border px-4 py-2 border-gray-500 ${item.stock === 0? 'cursor-auto' : 'cursor-pointer'}`
@@ -55,7 +56,7 @@ const ItemDetails = ({ item, type, isDisabled , isForSelling, cafe }) => {
   }
 
   const handleClick = () => {
-    addToCart(setBtnLoading, type, item, cafe, quantity)
+    addToCart(setBtnLoading, type, item, cafe, quantity, setOpenAlertModal)
   }
 
   const handleConfirm = () => {

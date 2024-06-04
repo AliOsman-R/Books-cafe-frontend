@@ -34,13 +34,13 @@ export const getDayInfo = (openingHours) => {
     const endTime = parseTime(todayOpeningHours.endTime);
 
     // Get the current time
-    // const currentTime = {
-    //   hours: currentDate.getHours(),
-    //   minutes: currentDate.getMinutes()
-    // };
+    const currentTime = {
+      hours: currentDate.getHours(),
+      minutes: currentDate.getMinutes()
+    };
 
     // // Check if the current time is within the working hours
-    // const isOpen = isTimeBetween(currentTime, startTime, endTime);
+    const isOpen = isTimeBetween(currentTime, startTime, endTime);
 
     // // Convert start and end times to AM/PM format
     const formattedStartTime = formatTime(todayOpeningHours.startTime);
@@ -48,7 +48,8 @@ export const getDayInfo = (openingHours) => {
 
     // Return the status and working hours
     return {
-      status: todayOpeningHours.isOpen ? "Open" : "Closed",
+      // status: todayOpeningHours.isOpen ? "Open" : "Closed",
+      status: isOpen? "Open" : "Closed",
       workingHours: `${formattedStartTime} - ${formattedEndTime}`
     };
   } else {
@@ -288,4 +289,17 @@ export const runFireworks = () => {
     confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
     confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
   }, 250);
+}
+
+
+export const extractTime = (dateString) => {
+	const date = new Date(dateString);
+	const hours = padZero(date.getHours());
+	const minutes = padZero(date.getMinutes());
+	return `${hours}:${minutes}`;
+}
+
+// Helper function to pad single-digit numbers with a leading zero
+const padZero = (number) => {
+	return number.toString().padStart(2, "0");
 }

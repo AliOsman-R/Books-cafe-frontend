@@ -11,7 +11,7 @@ const WorkingDaysSelector = ({workingDays, setWorkingDays}) => {
     day: '',
     startTime: '',
     endTime: '',
-    isOpen: false
+    // isOpen: false
   });
 
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -21,9 +21,9 @@ const WorkingDaysSelector = ({workingDays, setWorkingDays}) => {
     setNewDay({ ...newDay, [name]: value });
   };
 
-  const handleToggleChange = () => {
-    setNewDay({ ...newDay, isOpen: !newDay.isOpen });
-  };
+  // const handleToggleChange = () => {
+  //   setNewDay({ ...newDay, isOpen: !newDay.isOpen });
+  // };
 
   const handleAddDay = () => {
     if (newDay.id === null) {
@@ -57,7 +57,7 @@ const WorkingDaysSelector = ({workingDays, setWorkingDays}) => {
       day: '',
       startTime: '',
       endTime: '',
-      isOpen: false
+      // isOpen: false
     })
   }
 
@@ -92,13 +92,13 @@ const WorkingDaysSelector = ({workingDays, setWorkingDays}) => {
           onChange={handleInputChange}
           className="mr-2 p-2 rounded focus:outline-none focus:ring focus:border-primaryColor"
         />
-        <label className="flex items-center max-w-[122px] w-full gap-3 cursor-pointer">
+        {/* <label className="flex items-center max-w-[122px] w-full gap-3 cursor-pointer">
         <ToggleSwitch
             checked={newDay.isOpen}
             onChange={handleToggleChange}
           />
           {newDay.isOpen? 'Open' : 'Closed'}
-        </label>
+        </label> */}
         <PrimaryButton
           onClick={handleAddDay}
           disabled={!newDay.day || !newDay.startTime || !newDay.endTime}
@@ -125,7 +125,7 @@ const WorkingDaysSelector = ({workingDays, setWorkingDays}) => {
             <div className="mr-4">{day.startTime}</div>
             <div className="mr-4">-</div>
             <div className="mr-4">{day.endTime}</div>
-            <div>{day.isOpen ? 'Open' : 'Closed'}</div>
+            {/* <div>{day.isOpen ? 'Open' : 'Closed'}</div> */}
             <button
               className="ml-auto px-4 py-2 bg-white text-black rounded transition duration-300 ease-in-out transform hover:scale-110"
               onClick={() => handleEditDay(day.id)}

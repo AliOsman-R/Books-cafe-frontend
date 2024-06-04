@@ -49,8 +49,9 @@ export const isCafeInfoChanged = (cafeInfo, originalCafeInfo, workingDays) => {
       for (let i = 0; i < workingDays1.length; i++) {
           if (workingDays1[i].day !== workingDays2[i].day ||
               workingDays1[i].startTime !== workingDays2[i].startTime ||
-              workingDays1[i].endTime !== workingDays2[i].endTime ||
-              workingDays1[i].isOpen !== workingDays2[i].isOpen) {
+              workingDays1[i].endTime !== workingDays2[i].endTime )
+              // workingDays1[i].isOpen !== workingDays2[i].isOpen) 
+          {
               return false;
           }
       }

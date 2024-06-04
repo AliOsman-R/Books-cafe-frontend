@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 // import { Bar, Line, Pie } from 'react-chartjs-2';
 import { httpRequest } from '../../../utils/httpsRequest';
 import { v4 as uuidv4 } from 'uuid';
@@ -7,6 +7,8 @@ import { topDashboardInitialState } from '../../../data/initialStates';
 import { BarChart, LineChart, PieChart, lineElementClasses } from '@mui/x-charts';
 import Map from '../../../components/Map';
 import {AppLoader} from '../../../components/LoaderSpinner'
+import { useNavigate } from 'react-router-dom';
+import Modal from '../../../components/Modal';
 
 
 const Dashboard = () => {
@@ -18,6 +20,9 @@ const Dashboard = () => {
   const [items, setItems] = useState([])
   const [events, setEvents] = useState([])
   const [topDashboard, setTopDashboard] = useState([...topDashboardInitialState])
+  const [openModal, setOpenModal] = useState(false)
+  const inventorySalesRef = useRef(null);
+  const navigate = useNavigate()
   const {user} = useContext(Context)
 
   useEffect(() => {
@@ -60,6 +65,15 @@ const Dashboard = () => {
           }).finally(() => {setPageLoading(false)})
   }, []);
 
+  const handleClick = (item) => {
+    if(item.mainText === 'Orders Received')
+      navigate('/user/profile/manage-cafe/cafe-orders')
+
+    if(item.mainText === 'Total Sales' || item.mainText === 'Inventory')
+    inventorySalesRef.current.scrollIntoView({ behavior: 'smooth' });
+
+  }
+
   const checkStockStatus = (stock) => {
     console.log(stock)
     if(stock === undefined)
@@ -92,7 +106,10 @@ const Dashboard = () => {
       <div className="flex flex-col gap-5 min-h-screen rounded-lg">
         <div className="grid grid-cols-4 gap-3">
           {topDashboard.map((item) => (
-            <div key={uuidv4()} className={`${item.mainColor} p-5 rounded-md flex flex-col gap-5 text-white shadow-lg`}>
+            <div 
+            onClick={() => handleClick(item)} 
+            key={uuidv4()} 
+            className={`${item.mainColor} p-5 rounded-md flex flex-col gap-5 text-white shadow-lg ${item.mainText != 'Total Revenue'? 'cursor-pointer':''}`}>
               <p className='text-xl font-bold'>{item.mainText}</p>
               <div className="flex justify-between">
                 {item.icon}
@@ -116,8 +133,8 @@ const Dashboard = () => {
               height={200}
             />
           </div>
-          <div className="bg-white p-5 w-1/2 shadow-lg rounded-md ">
-            <p className='text-xl font-semibold'>Monthly Revenue</p>
+          <div className="bg-white p-5 w-1/2 shadow-lg rounded-md " >
+            <p className='text-xl font-semibold' ref={inventorySalesRef}>Monthly Revenue</p>
             <LineChart
               width={600}
               height={300}
@@ -131,24 +148,26 @@ const Dashboard = () => {
             />
           </div>
         </div>
-        <div className="bg-white p-5 w-fullshadow-lg rounded-md">
-          <p className='text-xl font-semibold'>Stock Report</p>
-          <div className="border border-gray-400 rounded-lg mt-5">
-            <div className={`grid grid-cols-5 p-3 rounded-t-lg bg-gray-100`}>
+        <div className="bg-white p-5 w-fullshadow-lg rounded-md" >
+          <p className='text-xl font-semibold' >Inventory and Sales Table</p>
+          <div className="border border-gray-400 rounded-lg mt-5" >
+            <div className={`grid grid-cols-6 p-3 rounded-t-lg bg-gray-100`}>
               <span>Product Name</span>
               <span >Date added</span> 
               <span>Price</span>
               <span>Stock Status</span>
               <span>Quantity</span>
+              <span>Sales</span>
             </div>
             <div className="max-h-[300px] min-h-[200px] h-full overflow-scroll">
               {items.map(item => (
-              <div className={`grid grid-cols-5 p-3 `}>
+              <div className={`grid grid-cols-6 p-3 `}>
                 <span>{item.name || item.title}</span>
                 <span>{item.createdAt.substring(0, 10)}</span>
                 <span>{item.price}</span>
                 <span className={`${checkStockStatus(item?.stock).style} bg-gray-200 rounded-full w-[50%] text-center p-2 `}>{checkStockStatus(item?.stock).text}</span>
                 <span>{item?.stock >= 0? item?.stock : 'Only for reading'}</span>
+                <span>{item.sold}</span>
               </div>
               ))}
             </div>
@@ -162,17 +181,22 @@ const Dashboard = () => {
           <div className="bg-white p-5 w-1/2 shadow-lg rounded-md ">
             <div className="">
               <p className='text-xl font-semibold'>Top 3 Customers with Most Orders</p>
-              <BarChart
-                width={600}
-                height={300}
-                xAxis =  {[{ data: topUsers?.map(topUser => topUser?.user?.name), scaleType: 'band' }]}
-                series={[
-                  {
-                    data: topUsers?.map(topUser => topUser?.orderCount),
-                    label: 'Number of orders',
-                  },
-                ]}
-              />
+              <div onClick={()=> setOpenModal(true)} className="">
+                <BarChart
+                  width={600}
+                  height={300}
+                  sx={(theme) => ({
+                    cursor:'pointer'
+                  })}
+                  xAxis =  {[{ data: topUsers?.map(topUser => topUser?.user?.name), scaleType: 'band' }]}
+                  series={[
+                    {
+                      data: topUsers?.map(topUser => topUser?.orderCount),
+                      label: 'Number of orders',
+                    },
+                  ]}
+                />
+              </div>
             </div>
             <div className="">
               <p className='text-xl font-semibold'>Cafe Events</p>
@@ -195,6 +219,32 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      <Modal setOpenModal={setOpenModal} $isOpen={openModal}>
+      <Modal.Header setOpenModal={setOpenModal}>Top 3 Customers with Most Orders</Modal.Header>
+        <Modal.Body>
+          <div className="lg:w-[1350px]">
+            <table className="min-w-full bg-white">
+                <thead>
+                  <tr>
+                    <th className="py-2">Name</th>
+                    <th className="py-2">Email</th>
+                    <th className="py-2">Phone Number</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {topUsers.map((customer, index) => (
+                    <tr key={index} className="text-center border-t">
+                      <td className="py-2">{customer.user.name}</td>
+                      <td className="py-2">{customer.user.email}</td>
+                      <td className="py-2">{customer.user.phoneNumber}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table> 
+          </div>
+        </Modal.Body>
+        <Modal.Footer onClick={() => setOpenModal(false)}></Modal.Footer>
+      </Modal>
     </div>
   )
 }
