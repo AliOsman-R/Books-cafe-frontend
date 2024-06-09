@@ -65,7 +65,7 @@ const WorkingDaysPage = ({cafe}) => {
           );
         })}
       </div>
-      <div className="w-full">
+      <div className="w-full h-[600px]">
         <Map cafes={[cafe]}/>
       </div>
     </div>

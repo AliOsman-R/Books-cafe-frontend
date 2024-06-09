@@ -21,8 +21,7 @@ const MessageContainer = ({selectedUser, setSelectedUser}) => {
 			) : (
 				<>
 					<div className='bg-gray-700 px-4 py-2 mb-2'>
-						<span className='label-text text-white'>To:</span>{" "}
-						<span className='text-white font-bold'>{selectedUser?.name}</span>
+						<span className='text-white font-bold'>{selectedUser?.userId?.name}</span>
 					</div>
 					<Messages selectedUser={selectedUser}/>
 					<MessageInput />

@@ -1,18 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react'
 import GlobalContext, { Context } from '../../context/GlobalContext'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import { AppLoader } from '../../components/LoaderSpinner'
 import useIsAdminAuth from '../../hooks/useIsAdminAuth'
 import { httpRequest } from '../../utils/httpsRequest'
 import AlertModal from '../../components/AlertModal'
+import { PrimaryButton } from '../../components/buttons'
+import { toast } from 'sonner'
 
 const AdminDashboard = () => {
-  const {admin, isAdminAuth, adminLoading} = useContext(Context)
+  const {admin, isAdminAuth, adminLoading, actions} = useContext(Context)
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(false)
   const [openAlertModal, setOpenAlertModal] = useState(false)
   const [alertLoading, setAlertLoading] = useState(false)
   const [userId, setUserId] = useState(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     setLoading(true)
@@ -34,7 +37,6 @@ const AdminDashboard = () => {
     if(userId)
     {
       setAlertLoading(true);
-      setLoading(true);
       httpRequest
         .delete(`/admin/delete-user/${userId}`)
         .then(() => {
@@ -45,9 +47,27 @@ const AdminDashboard = () => {
         })
         .finally(() => {
           setAlertLoading(false);
+          setOpenAlertModal(false)
           setUserId(null)
         });
     }
+  };
+
+  const handleLogout = () => {
+    httpRequest
+      .post("/admin/logout")
+      .then((data) => {
+        toast.success("Logged out successfully");
+        actions({ type: "SET_IS_ADMIN_AUTH", payload: false });
+        actions({ type: "SET_ADMIN", payload: {} });
+        navigate("/admin/login");
+        console.log(data);
+      })
+      .catch((err) => {
+        toast.error("Something went wrong!");
+        console.log("err: ", err);
+      })
+      .finally(() => {});
   };
   
   if(adminLoading){
@@ -65,30 +85,35 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="container mx-auto bg-white p-6 rounded-lg shadow-md h-screen">
-        <h2 className="text-2xl font-bold mb-6">Admin Dashboard</h2>
+        <div className="flex justify-between">
+          <h2 className="text-2xl font-bold mb-6">Admin Dashboard</h2>
+          <PrimaryButton className='h-[20px]' onClick={handleLogout}>Logout</PrimaryButton>
+        </div>
         {loading ? (
           <div className="flex justify-center items-center h-[50vh]">
             <AppLoader />
           </div>
         ) : (
           <div className="border border-gray-400 rounded-lg mt-5" >
-            <div className={`grid grid-cols-6 p-3 rounded-t-lg bg-gray-100`}>
+            <div className={`grid grid-cols-7 p-3 rounded-t-lg bg-gray-100`}>
                 <span>ID</span>
                 <span>Name</span>
                 <span>Email</span>
+                <span>Account Created Date</span>
                 <span>Cafe Name</span>
                 <span>Cafe Created Date</span>
                 <span>Actions</span>
               </div>
             <div>
               {users?.length > 0 && users.map((user) => (
-                <div className={`grid grid-cols-6 p-3 `} key={user._id}>
-                  <span className="py-2 px-4 border-b border-gray-200">{user._id}</span>
-                  <span className="py-2 px-4 border-b border-gray-200">{user.name}</span>
-                  <span className="py-2 px-4 border-b border-gray-200">{user.email}</span>
-                  <span className="py-2 px-4 border-b border-gray-200">{user?.cafeId?.name}</span>
-                  <span className="py-2 px-4 border-b border-gray-200">{user?.cafeId?.createdAt?.substring(0, 10)}</span>
-                  <span className="py-2 px-4 border-b border-gray-200">
+                <div className={`grid grid-cols-7 p-3 `} key={user._id}>
+                  <span className="py-2 px-4">{user._id}</span>
+                  <span className="py-2 px-4">{user.name}</span>
+                  <span className="py-2 px-4">{user.email}</span>
+                  <span className="py-2 px-4">{user?.createdAt?.substring(0, 10)}</span>
+                  <span className="py-2 px-4">{user?.cafeId?.name}</span>
+                  <span className="py-2 px-4">{user?.cafeId?.createdAt?.substring(0, 10)}</span>
+                  <span className="py-2 px-4">
                     <button
                       className="bg-red-500 text-white py-1 px-3 rounded-lg hover:bg-red-600"
                       onClick={() => {setOpenAlertModal(true); setUserId(user._id)}}

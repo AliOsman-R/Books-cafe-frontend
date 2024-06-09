@@ -8,6 +8,7 @@ import { setPagination } from '../../../../utils/AppUtils';
 import { toast } from 'sonner';
 import ItemCard from '../../../../components/cards/ItemCard';
 import Sorting from '../../../../components/Sorting';
+import Filter from '../../../../components/Filter';
 
 const GenericList = ({ type, initialState, sortFunction, AddComponent, EditComponent, requiredFieldsMissing, FormComponent, extraImagesKey, isItemDataChanged}) => {
   const [items, setItems] = useState([]);
@@ -91,27 +92,32 @@ const GenericList = ({ type, initialState, sortFunction, AddComponent, EditCompo
             <Sorting context={type} items={items} setData={setFilteredItems} />
         </div>
       }
-      <div className="flex flex-wrap justify-center mt-10 min-h-[1114px]">
-        {filteredItems.length === 0 && (
-          <div className="flex justify-center items-center h-[50vh] text-gray-400 text-xl">
-            {`No ${type} available please add ${type}`}
+      {/* <div className="flex flex-grow"> */}
+        {/* <div className="flex-2">
+          <Filter items={items} setFilteredItems={setFilteredItems} type={type} />
+        </div> */}
+        <div className="flex flex-1 flex-wrap justify-center mt-10 min-h-[1114px]">
+          {filteredItems.length === 0 && (
+            <div className="flex justify-center items-center h-[50vh] text-gray-400 text-xl">
+              {`No ${type} available please add ${type}`}
+            </div>
+          )}
+          {setPagination(recordsPerPage, currentPage, filteredItems)?.map(item => (
+          <div key={item._id}>
+            <ItemCard
+                item={item}
+                isManage={true}
+                setOpenModal={setOpenModal}
+                handleDelete={handleDelete}
+                setItemData={setItemData}
+                setOriginalItemData={setOriginalItemData}
+                deleteLoading={deleteLoading}
+                type={type === 'events'? 'event' : type}
+            />
           </div>
-        )}
-        {setPagination(recordsPerPage, currentPage, filteredItems)?.map(item => (
-        <div key={item._id}>
-          <ItemCard
-              item={item}
-              isManage={true}
-              setOpenModal={setOpenModal}
-              handleDelete={handleDelete}
-              setItemData={setItemData}
-              setOriginalItemData={setOriginalItemData}
-              deleteLoading={deleteLoading}
-              type={type === 'events'? 'event' : type}
-          />
+          ))}
         </div>
-        ))}
-      </div>
+      {/* </div> */}
       <EditComponent
         setItems={setItems}
         openModal={openModal}

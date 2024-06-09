@@ -176,7 +176,10 @@ const Dashboard = () => {
         <div className="flex gap-5">
           <div className="bg-white p-5 w-1/2 shadow-lg rounded-md ">
             <p className='text-xl font-semibold mb-2'>Cafe Location</p>
-              {cafe && <Map cafes={[cafe]}/>}
+              {cafe &&
+              <div className=" h-[600px]">
+                <Map cafes={[cafe]}/>
+              </div>}
           </div>
           <div className="bg-white p-5 w-1/2 shadow-lg rounded-md ">
             <div className="">

@@ -108,7 +108,7 @@ const ItemCard = ({ item , isManage, setOpenModal, handleDelete, setItemData, se
       </div>
 
       <Modal setOpenModal={setOpenModalItem} $isOpen={openModalItem}>
-        <Modal.Header setOpenModal={setOpenModalItem}>{item.name}</Modal.Header>
+        <Modal.Header setOpenModal={setOpenModalItem}>{item.name || item.title}</Modal.Header>
         <Modal.Body>
           <div className="lg:w-[1350px]">
             {noEvents ? 
@@ -155,9 +155,13 @@ const BookCard = ({item, isForSelling}) => {
     return (
       <div>
           <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 overflow-hidden max-h-[28px]">{item.title}</h5>
-          <div className="mb-2">
-            <StarRating rating={item.averageRating} />
-          </div>
+          {/* <div className="mb-2"> */}
+            {/* <StarRating rating={item.averageRating} /> */}
+            <div className="flex items-center gap-1 mb-2">
+                <StarRating rating={item.averageRating} />
+                <span className='text-gray-400'>({item?.numOfReviews} Reviews) ({item.sold} sold)</span>
+            </div>
+          {/* </div> */}
           <div className="text-sm">
             <p className="text-primaryColor font-bold max-h-[20px] overflow-hidden">Author: {item.author}</p>
             <p className='font-semibold max-h-[20px] overflow-hidden'>
@@ -193,8 +197,9 @@ const BookCard = ({item, isForSelling}) => {
         <h5 className="mb-1 text-lg font-semibold tracking-tight text-gray-900">{item.name}</h5>
         <div className="flex justify-between">
           <p className={`${item.stock > 0 ? "text-green-500" : "text-red-500"} mb-2`}>{item.stock > 0  && item.status === 'Available'? `${item.stock} available` : "Not Available"}</p>
-          <div className="mb-2">
+          <div className="flex items-center gap-1 mb-2">
               <StarRating rating={item.averageRating} />
+              <span className='text-gray-400'>({item?.numOfReviews} Reviews) ({item.sold} sold)</span>
           </div>
         </div>
         <p className="mb-3 text-sm text-gray-700 overflow-hidden min-w-[310px] min-h-[40px] max-h-[40px]">{item.description}</p>

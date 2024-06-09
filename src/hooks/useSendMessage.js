@@ -5,7 +5,7 @@ import { toast } from "sonner";
 
 const useSendMessage = () => {
 	const [loading, setLoading] = useState(false);
-	const { messages, actions, selectedUserId } = useContext(Context);
+	const { messages, actions, selectedUserId, userChats } = useContext(Context);
 
 	const sendMessage = (message) => {
 		setLoading(true);
@@ -13,7 +13,15 @@ const useSendMessage = () => {
         .then(({data}) => {
             console.log(data)
             actions({type:'SET_MESSAGES', payload:[...messages, data.newMessage]})
-            // toast.success('Message has been ')
+            const newUserChats = userChats.map((userChat) => {
+                	if(userChat?.userId?._id === selectedUserId){
+                		userChat.lastMessage = message
+                		userChat.date = new Date()
+                	}
+        
+                	return userChat
+                })
+            actions({type:'SET_USER_CHATS', payload:newUserChats})
         })
         .catch((err) => {
             console.log(err)

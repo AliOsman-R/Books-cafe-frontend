@@ -22,6 +22,7 @@ export default function GlobalContext() {
   const [messages, setMessages] = useState([])
   const [socket, setSocket] = useState(null);
 	const [onlineUsers, setOnlineUsers] = useState([]);
+  const [userChats, setUserChats] = useState([])
 
   const actions = (action) => {
     const { type, payload } = action;
@@ -55,6 +56,8 @@ export default function GlobalContext() {
         return setSelectedUserId(payload);
       case "SET_MESSAGES":
         return setMessages(payload);
+      case "SET_USER_CHATS":
+        return setUserChats(payload);
       default:
         return loading;
     }
@@ -158,6 +161,7 @@ export default function GlobalContext() {
     adminLoading,
     messages,
     socket,
-    onlineUsers
+    onlineUsers,
+    userChats
   };
 }

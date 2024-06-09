@@ -13,7 +13,7 @@ const CafeCard = ({ item }) => {
   const {actions} = useContext(Context)
 
   return (
-    <div className="max-w-[370px] md:h-[535px] m-4 ssm:h-[555px] rounded-lg overflow-hidden shadow-lg bg-white">
+    <div className="max-w-[370px] md:h-[535px] ssm:h-[555px] rounded-lg overflow-hidden shadow-lg bg-white">
         <img className="ssm:w-full md:min-w-[370px]  h-64 object-cover object-center" src={image || defaultCafeImage} alt={name} />
         <div className="px-6 py-4">
           <div className="flex items-center justify-between">
