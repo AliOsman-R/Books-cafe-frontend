@@ -71,7 +71,7 @@ const CheckOut = () => {
 
   const totalAmount = (calculateOverallTotal(cartItems) + deliveryFee + calculateSST()).toFixed(2)
 
-  const handlePay = () => {
+  const handlePlaceOrder = () => {
     if(!validateExpiry(expiry)) return;
 
     if(!validateMalaysianPhoneNumber(phoneNumber))
@@ -236,7 +236,7 @@ const CheckOut = () => {
           <PrimaryButton 
           disabled={checkValidation() || btnLoading} 
           className='h-[45px]'
-          onClick={handlePay}
+          onClick={handlePlaceOrder}
           >
             {btnLoading ? <BtnLoader/> : 'Pay'}
           </PrimaryButton>

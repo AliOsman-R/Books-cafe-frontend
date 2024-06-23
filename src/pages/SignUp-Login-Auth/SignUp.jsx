@@ -23,31 +23,6 @@ const SignUp = () => {
   const navigate = useNavigate();
   const showPassRef = useRef(null)
 
-  // const [location, setLocation] = useState('')
-  // const getLocation = () => {
-  //   if (navigator.geolocation) {
-  //     navigator.geolocation.getCurrentPosition(
-  //       async (position) => {
-  //         const { latitude, longitude } = position.coords;
-  //         console.log(latitude,longitude)
-  //         try {
-  //           const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=YOUR_GOOGLE_MAPS_API_KEY`);
-  //           const data = await response.json();
-  //           const address = data.results[0].formatted_address;
-  //           setLocation(address);
-  //         } catch (error) {
-  //           console.error('Error fetching address:', error);
-  //         }
-  //       },
-  //       (error) => {
-  //         console.error('Error getting location:', error);
-  //       }
-  //     );
-  //   } else {
-  //     console.error('Geolocation is not supported by this browser.');
-  //   }
-  // };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCredentials({ ...credentials, [name]: value.trim() });
@@ -79,7 +54,8 @@ const SignUp = () => {
 
     if (!validatePassword(credentials.password)) {
       setValidationError(
-        "Password must include at least one uppercase letter, one lowercase letter, one number, one special character, and be at least 8 characters long."
+        "Password must include at least one uppercase letter, " +
+        "one lowercase letter, one number, one special character, and be at least 8 characters long."
       );
       return;
     }
@@ -102,20 +78,6 @@ const SignUp = () => {
   return (
     <AuthCard title={"Sign Up"} text={"Welcome to CafeX"}>
       <div className="flex border-primaryColor border-b">
-        {/* <button
-            className={`flex-1 py-2 font-semibold transition-colors duration-200 ease-out cursor-auto ${tab === 'customer' ? 'text-[#cd8c42] border-[#cd8c42]' : 'text-gray-500 border-transparent'}`}
-            // onClick={() => handleTabChange('customer')}
-            style={{ borderBottomWidth: tab === 'customer' ? '2px' : '' }}
-          >
-            User
-          </button>
-          <button
-            className={`flex-1 py-2 font-semibold transition-colors duration-200 ease-out ${tab === 'store_owner' ? 'text-[#cd8c42] border-[#cd8c42]' : 'text-gray-500 border-transparent'}`}
-            onClick={() => handleTabChange('store_owner')}
-            style={{ borderBottomWidth: tab === 'store_owner' ? '2px' : '' }}
-          >
-            Store Owner
-          </button> */}
       </div>
       <div>
         <form onSubmit={handleSubmit} className="space-y-3 ssm:p-3 lg:p-8">

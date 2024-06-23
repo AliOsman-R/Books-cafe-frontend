@@ -56,11 +56,21 @@ const OrderDetails = () => {
 
   const handleClick = () => {
     if(cafeOwner){
-      actions({type:'SET_SELECTED_USER_ID', payload:order.userId._id})
-      navigate('/user/profile/manage-user/chat')
+      if(order?.userId?._id)
+      {
+        actions({type:'SET_SELECTED_USER_ID', payload:order?.userId?._id})
+        navigate('/user/profile/manage-user/chat')
+      }else{
+        toast.error("You cant contact the customer, since their account has been deleted")
+      }
     }else{
-      actions({type:'SET_SELECTED_USER_ID', payload:order.cafeId.userId})
-      navigate('/user/profile/manage-user/chat')
+      if(order?.cafeId?.userId)
+      {
+        actions({type:'SET_SELECTED_USER_ID', payload:order.cafeId.userId})
+        navigate('/user/profile/manage-user/chat')
+      }else{
+        toast.error("You cant contact cafe since since their account has been deleted")
+      }
     }
   }
 
@@ -74,7 +84,8 @@ const OrderDetails = () => {
       cafeId:order.cafeId._id,
       reviewableId,
       reviewableType,
-      productName
+      productName,
+      customerName:user.name
     }
     setBtnLoading(true)
     httpRequest.post(`/reviews/${order._id}`, reviewData)
@@ -85,7 +96,7 @@ const OrderDetails = () => {
     })
     .catch((err) => {
       console.log(err)
-      toast.error(err.response.data.message)
+      toast.error(err?.response?.data?.message)
     }).finally(() => {setBtnLoading(false); setReview({comment:'', rating:5})})
   }
 
@@ -214,8 +225,8 @@ const OrderDetails = () => {
                       <span className='font-semibold'>Address 2</span>
                     </div>
                     <div className="flex flex-col gap-3">
-                      <span className='text-gray-600'>{order?.userId?.name}</span>
-                      <span className='text-gray-600'>{order?.userId?.email}</span>
+                      <span className='text-gray-600'>{order?.userId?.name || order?.customerDetails?.name}</span>
+                      <span className='text-gray-600'>{order?.userId?.email || order?.customerDetails?.email}</span>
                       <span className='text-gray-600'>{order?.firstAddress}</span>
                       <span className='text-gray-600'>{order?.secondAddress}</span>
                     </div>

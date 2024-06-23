@@ -17,7 +17,9 @@ const CafeSwitch = ({ setOpenModal, openModal }) => {
   const {user, actions} = useContext(Context)
 
   const isCafeInfoEmpty = () => {
-    return isAnyFieldEmpty(cafeInfo) || (cafeInfo.orderMethods.delivery === false && cafeInfo.orderMethods.pickUpAtCafe === false)
+    const {deliveryEst, ...rest} = cafeInfo
+    return (isAnyFieldEmpty(rest) || (cafeInfo.orderMethods.delivery === false && cafeInfo.orderMethods.pickUpAtCafe === false) 
+    || (cafeInfo.orderMethods.delivery? deliveryEst.trim() === '' : false))
   }
 
   const isInfoChanged = () => {

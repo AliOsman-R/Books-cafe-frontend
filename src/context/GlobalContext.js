@@ -16,7 +16,7 @@ export default function GlobalContext() {
   const [specialRequest, setSpecialRequest] = useState('');
   const [completedOrder, setCompletedOrder] = useState(false);
   const [cartItems, setCartItems] = useState([]);
-  const [maxDistance, setMaxDistance] = useState(1200)
+  const [maxDistance, setMaxDistance] = useState(2000)
   const [selectedCafe, setSelectedCafe] = useState({});
   const [selectedUserId, setSelectedUserId] = useState(null)
   const [messages, setMessages] = useState([])

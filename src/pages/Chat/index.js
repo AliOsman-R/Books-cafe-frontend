@@ -10,6 +10,7 @@ const Chat = () => {
     const [selectedUser, setSelectedUser] = useState(null)
     const {selectedUserId, user, actions, onlineUsers, userChats} = useContext(Context)
     const [loading, setLoading] = useState(false)
+    const [chatLoading, setChatLoading] = useState(false)
     const areUserChats = userChats.length > 0
     userChats?.sort((a,b) => new Date(b.date).valueOf() - new Date(a.date).valueOf() )
     const isOnline = onlineUsers?.includes(selectedUser?.userId?._id)
@@ -32,7 +33,7 @@ const Chat = () => {
     }, [])
     
     useEffect(() => {
-        console.log('run')
+        setChatLoading(true)
         httpRequest.get(`/user/chat-users/${user._id}`)
         .then(({data}) => {
             console.log(data)
@@ -40,7 +41,7 @@ const Chat = () => {
         })
         .catch((err) => {
             console.log(err)
-        }).finally(() => {})
+        }).finally(() => { setChatLoading(false)})
     }, [])
 
     const handleClick = (userChat) => {
@@ -79,14 +80,14 @@ const Chat = () => {
                     )}
                 </div>
                 <div className="flex flex-col p-2">
-                    {areUserChats && 
-                        userChats.map(userChat => (
+                    {!chatLoading && 
+                        userChats?.map(userChat => (
                             <div key={userChat._id}>
                                 <ChatUsers userChat={userChat} handleClick={handleClick} onlineUsers={onlineUsers}/>
                             </div>
                         ))
                     }
-                    {!areUserChats && (
+                    {chatLoading && (
                         <div className='flex justify-center items-center h-full'>
                             <AppLoader />
                         </div>

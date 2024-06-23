@@ -24,14 +24,14 @@ const CafeProfile = () => {
     const isChanged = isCafeInfoChanged(cafeInfo, originalCafeInfo, workingDays)
     const {name, phoneNumber, city, address, bio, latitude, longitude} = cafeInfo
     const cafeDataIsEmpty = {name, phoneNumber, city, address, bio, latitude, longitude}
-    console.log(cafeInfo)
+    // console.log(cafeInfo)
 
     useEffect(() => {
     httpRequest.get(`/cafe/user-cafe/${user._id}`)
     .then(({data}) => {
         console.log(data)
         const [longitude, latitude] = data.cafe.coordinates
-        const cafeData = {...data.cafe, latitude, longitude}
+        const cafeData = {...data.cafe,latitude: parseFloat(latitude), longitude: parseFloat(longitude)}
         setCafeInfo(cafeData)
         setOriginalCafeInfo({...cafeData,workingDays:data.cafe?.workingDays})
         setWorkingDays(data.cafe?.workingDays.map(workDay => ({...workDay,id:workDay._id})))
@@ -128,8 +128,10 @@ const CafeProfile = () => {
             return toast.error('Cafes information must not be empty')
         }
 
-        const coordinates = [parseFloat(cafeInfo.longitude), parseFloat(cafeInfo.latitude)]
-        console.log(changedCafeInfo)
+        const coordinates = []
+        coordinates.push(parseFloat(cafeInfo.longitude))
+        coordinates.push(parseFloat(cafeInfo.latitude))
+        
 
         setBtnLoading(true);
         if (cafeInfo.image !== originalCafeInfo.image) {
@@ -141,8 +143,8 @@ const CafeProfile = () => {
           .then(({ data }) => {
             console.log(data);
             toast.success(data?.message);
-            const {latitude,longitude} = data.cafe.coordinates
-            const cafeData = {...data.cafe, latitude, longitude}
+            const [longitude, latitude] = data.cafe.coordinates
+            const cafeData = {...data.cafe, latitude: parseFloat(latitude), longitude: parseFloat(longitude)}
             setCafeInfo(cafeData);
             setOriginalCafeInfo(cafeData);
           })

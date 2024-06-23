@@ -28,7 +28,6 @@ const Sidebar = ({setMenu, setOpenModal, openModal}) => {
   const location = useLocation();
   const activePage = location.pathname.split("/")[4];
   const isOwner = user.role === 'owner'
-  console.log(!isAccount)
 
   const handleToggle = (e) => {
     setToggle(!toggle);
@@ -77,7 +76,7 @@ const Sidebar = ({setMenu, setOpenModal, openModal}) => {
         console.log(data);
       })
       .catch((err) => {
-        toast.error("Something went wrong!");
+        toast.error(err?.response?.data?.message);
         console.log("err: ", err);
       })
       .finally(() => setDeleteLoading(false));

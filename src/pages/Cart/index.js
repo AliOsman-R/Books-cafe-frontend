@@ -95,12 +95,13 @@ const Cart = () => {
       <h2 className="text-2xl font-semibold mb-10">Shopping Cart</h2>
         <div className='mx-20'>
           <div className="min-h-[200px]">
-            <div className="grid grid-cols-6 border-b border-gray-400 py-4">
+            <div className="grid grid-cols-7 border-b border-gray-400 py-4">
               <span>Products</span>
               <span>Title</span>
               <span>Price</span>
               <span>Quantity</span>
-              <span>Total</span>
+              <span>Total Price</span>
+              <span>Stock Quantity</span>
               <span>Remove</span>
             </div>
             {cartItems.map(item => (

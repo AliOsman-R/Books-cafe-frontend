@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { FaClock, FaRegCalendarTimes, FaRegCalendarCheck } from 'react-icons/fa';
 import Map from '../../components/Map';
+import { getDayInfo } from '../../utils/AppUtils';
 
 const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const WorkingDaysPage = ({cafe}) => {
@@ -36,12 +37,13 @@ const WorkingDaysPage = ({cafe}) => {
       <div className="flex justify-between">
         {displayedDays.map((dayName, index) => {
           const workingDay = getWorkingDay(dayName);
+          const dayData = getDayInfo(workingDays);
           return (
             <div key={dayName} className="p-4 px-10 border rounded-lg bg-white shadow-lg flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-semibold mb-2">{dayName}</h2>
                 {workingDay ? (
-                  workingDay.isOpen ? (
+                  dayData.status === "Open" ? (
                     <>
                       <p className="text-green-600 flex items-center">
                         <FaRegCalendarCheck className="mr-1" /> Open

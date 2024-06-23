@@ -45,15 +45,13 @@ const EditItem = ({openModal, itemData, setItemData, setOpenModal, originalItemD
       let placeImages = []
       setBtnLoading(true)
       
-      if(hasImagesChanged(originalItemData.images, itemData.images))
-      {
+      if(hasImagesChanged(originalItemData.images, itemData.images)){
           ItemImages = await handleUploadImages('images')
       }
 
-      if(extraImagesKey && hasImagesChanged(originalItemData[extraImagesKey], itemData[extraImagesKey]))
-    {
+      if(extraImagesKey && hasImagesChanged(originalItemData[extraImagesKey], itemData[extraImagesKey])){
         placeImages = await handleUploadImages(extraImagesKey)
-    }
+      }
                   
       const trimedItem = trimFormData(itemData)
       const {images, bookPlaceImages, ...rest} = trimedItem
@@ -75,7 +73,6 @@ const EditItem = ({openModal, itemData, setItemData, setOpenModal, originalItemD
      .catch(err => {
       console.log(err)
      }).finally(() => {setBtnLoading(false)})
-
   }
 
 return (
