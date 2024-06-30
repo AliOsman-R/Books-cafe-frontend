@@ -7,7 +7,7 @@ import { PrimaryButton } from '../../../components/buttons';
 import 'react-phone-input-2/lib/bootstrap.css'
 import { BtnLoader } from '../../../components/LoaderSpinner';
 import { toast } from 'sonner';
-import { validTypes, validateMalaysianPhoneNumber } from '../../../utils/validation';
+import { validTypes, validateEmail, validateMalaysianPhoneNumber } from '../../../utils/validation';
 import { httpRequest } from '../../../utils/httpsRequest';
 import PhoneInput from 'react-phone-input-2';
 import ImageContainer from '../../../components/ImageContainer';
@@ -19,7 +19,6 @@ const InfoForm = () => {
       const [originalUserInfo, setOriginalUserInfo] = useState(userInitialState);
       const [btnLoading, setBtnLoading] = useState(false);
       const { user, actions } = useContext(Context);
-      console.log(user)
     
       useEffect(() => {
         if (user) setUserInfo({ ...userInfo, ...user });
@@ -72,7 +71,11 @@ const InfoForm = () => {
           changedUserInfo["name"] = userInfo.name.trim()
         }
         if (userInfo.email.trim() !== originalUserInfo.email) {
-          changedUserInfo["email"] = userInfo.email.trim()
+          if(!validateEmail(userInfo.email.trim())){
+            return toast.error("Please enter a valid email address.")
+          }
+
+          changedUserInfo["email"] = userInfo.email.trim().toLowerCase()
         }
         if (userInfo.firstAddress.trim() !== originalUserInfo.firstAddress) {
           changedUserInfo["firstAddress"] = userInfo.firstAddress.trim()
@@ -91,7 +94,7 @@ const InfoForm = () => {
         }
 
         if(!userInfo.name.trim() || !userInfo.email.trim())
-          return toast.error("Name and Email cant be empty")
+          return toast.error("Full Name and Email cant be empty")
 
         setBtnLoading(true);
         if (userInfo.profileImage !== originalUserInfo.profileImage) {

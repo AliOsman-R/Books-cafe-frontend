@@ -161,7 +161,7 @@ const Dashboard = () => {
             </div>
             <div className="max-h-[300px] min-h-[200px] h-full overflow-scroll">
               {items.map(item => (
-              <div className={`grid grid-cols-6 p-3 `}>
+              <div className={`grid grid-cols-6 p-3 `}  key={uuidv4()} >
                 <span>{item.name || item.title}</span>
                 <span>{item.createdAt.substring(0, 10)}</span>
                 <span>{item.price}</span>

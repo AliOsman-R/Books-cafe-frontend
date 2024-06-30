@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-const Sorting = ({ context, items, setData  }) => {
+const Sorting = ({ context, items, setData, setCurrentPage, originalCurrentPage }) => {
     const [selection, setSelection] = useState('All');
 
     useEffect(() => {
@@ -14,6 +14,15 @@ const Sorting = ({ context, items, setData  }) => {
                 : items.filter(item => item.type === selection);
         }
         setData(results);
+
+        if(results.length > 0){
+            setCurrentPage(1)
+          }
+
+        if(selection === 'All'){
+            setCurrentPage(originalCurrentPage)
+        }
+      
     }, [selection, items, context, setData]);
 
     const options = context === 'books'

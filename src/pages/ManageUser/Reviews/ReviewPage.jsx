@@ -84,7 +84,7 @@ const ReviewPage = ({ reviews, setReviews, pageLoading, isUser }) => {
           <div className="h-screen overflow-scroll">
             {filteredReviews.map((review) => (
               <div key={review._id} className={`grid ${isUser? 'grid-cols-6' : 'grid-cols-5' } border border-gray-200 p-3`}>
-                <p>{review.userId.name}</p>
+                <p>{review?.userId?.name || review?.customerName}</p>
                 <p>{review.productName}</p>
                 <p className="col-span-2">{review.comment}</p>
                 <p>

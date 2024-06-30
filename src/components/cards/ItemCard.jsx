@@ -61,9 +61,9 @@ const ItemCard = ({ item , isManage, setOpenModal, handleDelete, setItemData, se
         case 'menu':
             return <MenuCard item={item} />;
         case 'events':
-            return <EventCard item={item} isManage={isManage} cafe={cafe} />;
+            return <EventCard item={item} isManage={isManage} cafe={cafe} setOpenModalItem={setOpenModalItem} />;
         case 'event':
-          return <EventCard item={item} isManage={isManage} cafe={cafe} />;
+          return <EventCard item={item} isManage={isManage} cafe={cafe} setOpenModalItem={setOpenModalItem} />;
         default:
             return <div>Unknown Type</div>;
     }
@@ -71,7 +71,7 @@ const ItemCard = ({ item , isManage, setOpenModal, handleDelete, setItemData, se
 
   return (
     <div className="max-w-[350px] h-[458px] rounded-lg overflow-hidden shadow-md bg-white m-4 hover:shadow-xl transition-shadow duration-300 ease-in-out">
-      <img className="w-full min-w-[350px] h-56 object-cover object-center" src={item?.images[0].url} alt={item.name} />
+      <img className="w-full min-w-[350px] h-56 object-fill object-center" src={item?.images[0].url} alt={item.name} />
 
       <div className="p-5 flex flex-col justify-between">
         {contentSwitch()}
@@ -84,13 +84,13 @@ const ItemCard = ({ item , isManage, setOpenModal, handleDelete, setItemData, se
               className='h-[20px] min-w-[154px]'
               >
                 {btnLoading.id === item._id ? <BtnLoader/> : ' Add to Cart'}
-              </PrimaryButton>
-            }
+              </PrimaryButton>}
+          
             <button onClick={()=> setOpenModalItem(true)} className="text-xs font-bold text-primaryColor hover:underline">
               View Details
             </button>
           </div>
-        }
+          }
         {isManage &&
           <div className="flex justify-between items-center mt-4">
             <PrimaryButton onClick={handleEditClick} className='h-[20px]'>
@@ -214,7 +214,7 @@ const BookCard = ({item, isForSelling}) => {
   }
 
 
-  const EventCard = ({item, isManage, cafe}) => {
+  const EventCard = ({item, isManage, cafe, setOpenModalItem}) => {
     const [timeLeft, setTimeLeft] = useState(calculateTimeLeft(item.date, item.startTime, item.endTime));
 
     useEffect(() => {
@@ -243,7 +243,7 @@ const BookCard = ({item, isForSelling}) => {
 
     return (
       <div className="flex flex-col gap-2">
-        <h2 className="text-gray-900 font-bold text-2xl">{item.title}</h2>
+        <h2 className="text-gray-900 font-bold text-2xl max-h-[30px] overflow-hidden">{item.title}</h2>
         <p className={`${displayTimeLeft().includes('ended') ? 'text-red-600' : 'text-green-600'} text-sm`}>
           {displayTimeLeft()}
         </p>
@@ -253,9 +253,14 @@ const BookCard = ({item, isForSelling}) => {
           </p>
         }
         <p className="text-gray-600 text-sm h-[40px] overflow-hidden font-semibold">{item.location}</p>
-        <p className="text-sm font-semibold text-primaryColor">
-          {new Date(item.date).toLocaleDateString()} - {item.startTime} - {item.endTime}
-        </p>
+        {/* <div className="flex justify-between"> */}
+          <p className="text-sm font-semibold text-primaryColor">
+            {new Date(item.date).toLocaleDateString()} - {item.startTime} - {item.endTime}
+          </p>
+          {/* <button onClick={()=> setOpenModalItem(true)} className="text-xs font-bold text-primaryColor hover:underline">
+              View Details
+            </button>
+        </div> */}
       </div>
     )
   }

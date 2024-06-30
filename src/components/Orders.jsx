@@ -19,6 +19,7 @@ const Orders = ({fetchUrl, cafeOwner}) => {
   const [tabOrders, setTabOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [originalCurrentPage, setOriginalCurrentPage] = useState(1)
   const [recordsPerPage, setRecordsPerPage] = useState(6);
   const [activeTab, setActiveTab] = useState('Pending');
   const areOrders = filteredOrders.length > 0
@@ -47,6 +48,14 @@ const Orders = ({fetchUrl, cafeOwner}) => {
       )
     );
     setFilteredOrders(filteredData);
+
+    if(filteredData.length > 0){
+      setCurrentPage(1)
+    }
+
+    if(!query){
+      setCurrentPage(originalCurrentPage)
+    }
   };
 
   const handleTabClick = (tab) => {
@@ -151,6 +160,7 @@ const Orders = ({fetchUrl, cafeOwner}) => {
             recordsPerPage={recordsPerPage}
             setRecordsPerPage={setRecordsPerPage}
             data={filteredOrders}
+            setOriginalCurrentPage={setOriginalCurrentPage}
           />
         </div>
       </div>

@@ -13,6 +13,7 @@ import Filter from '../../../../components/Filter';
 const GenericList = ({ type, initialState, sortFunction, AddComponent, EditComponent, requiredFieldsMissing, FormComponent, extraImagesKey, isItemDataChanged}) => {
   const [items, setItems] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [originalCurrentPage, setOriginalCurrentPage] = useState(1)
   const [recordsPerPage, setRecordsPerPage] = useState(6);
   const [openModal, setOpenModal] = useState(false);
   const [pageLoading, setPageLoading] = useState(false);
@@ -53,6 +54,14 @@ const GenericList = ({ type, initialState, sortFunction, AddComponent, EditCompo
       )
     );
     setFilteredItems(filteredData);
+
+    if(filteredData.length > 0){
+      setCurrentPage(1)
+    }
+
+    if(!query){
+      setCurrentPage(originalCurrentPage)
+    }
   };
 
   const handleDelete = (item) => {
@@ -89,7 +98,7 @@ const GenericList = ({ type, initialState, sortFunction, AddComponent, EditCompo
       </div>
       {type !== 'events' && 
         <div className='w-[25%]'>
-            <Sorting context={type} items={items} setData={setFilteredItems} />
+            <Sorting context={type} items={items} setData={setFilteredItems} originalCurrentPage={originalCurrentPage} setCurrentPage={setCurrentPage} />
         </div>
       }
       {/* <div className="flex flex-grow"> */}
@@ -138,6 +147,7 @@ const GenericList = ({ type, initialState, sortFunction, AddComponent, EditCompo
           recordsPerPage={recordsPerPage}
           setRecordsPerPage={setRecordsPerPage}
           data={filteredItems}
+          setOriginalCurrentPage={setOriginalCurrentPage}
         />
       </div>
     </div>

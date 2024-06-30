@@ -8,7 +8,7 @@ const Message = ({message, selectedUser}) => {
     const fromMe = message.senderId === user._id;
     const formattedTime = extractTime(message.createdAt);
     const chatClassName = fromMe ? 'justify-end' : 'justify-start';
-    const profileImage = fromMe ? user.profileImage : selectedUser?.profileImage;
+    const profileImage = fromMe ? user.profileImage : selectedUser?.userId?.profileImage;
     const bubbleBgColor = fromMe ? 'bg-blue-500 rounded-l-[10px] rounded-tr-[10px]' : 'bg-gray-300 rounded-r-[10px] rounded-tl-[10px]';
     const textColor = fromMe ? 'text-white' : 'text-black';
     const flexReverse = fromMe ? '' : 'flex-row-reverse';

@@ -43,7 +43,7 @@ const WorkingDaysPage = ({cafe}) => {
               <div>
                 <h2 className="text-lg font-semibold mb-2">{dayName}</h2>
                 {workingDay ? (
-                  dayData.status === "Open" ? (
+                  dayData.status ? (
                     <>
                       <p className="text-green-600 flex items-center">
                         <FaRegCalendarCheck className="mr-1" /> Open

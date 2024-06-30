@@ -7,6 +7,7 @@ import { PrimaryButton, linkStyle } from '../../../components/buttons'
 import { BtnLoader } from '../../../components/LoaderSpinner'
 import { httpRequest } from '../../../utils/httpsRequest'
 import AuthCard from '../../../components/cards/AuthCard'
+import { validateEmail } from '../../../utils/validation'
 
 const ForgotPass = () => {
     const [email, setEmail] = useState('')
@@ -19,11 +20,17 @@ const ForgotPass = () => {
       {
         return toast.error("Please enter your email")
       }
+
+      if (!validateEmail(email)) {
+        toast.error("Please enter a valid email address.");
+        return;
+      }
+
       setBtnLoading(true)
         httpRequest.post('/auth/forgot-password',{email})
         .then(data => {
             console.log(data)
-            toast.success("An email has been sent to your eamil address")
+            toast.success("An email has been sent to your email address")
             navigate('/auth/login')
         })
         .catch(err => {

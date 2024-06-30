@@ -7,7 +7,7 @@ import { states } from '../data/data';
 import StarRating from './StarRating';
 import { getDayInfo } from '../utils/AppUtils';
 
-const CafeFilter = ({ setOpenFilter, handleClick, cafes, setCafes }) => {
+const CafeFilter = ({ setOpenFilter, handleClick, cafes, setCafes, setCurrentPage, originalCurrentPage }) => {
   const { maxDistance, actions } = useContext(Context);
   const [rating, setRating] = useState(0);
   const [state, setState] = useState('');
@@ -22,7 +22,7 @@ const CafeFilter = ({ setOpenFilter, handleClick, cafes, setCafes }) => {
     setRating(0);
     setState('');
     setIsOpen('any');
-    handleDistanceChange('SET_MAX_DISTANCE', parseFloat(1200))
+    handleDistanceChange('SET_MAX_DISTANCE', parseFloat(2000))
     setCafes(cafes)
   };
 
@@ -61,8 +61,16 @@ const CafeFilter = ({ setOpenFilter, handleClick, cafes, setCafes }) => {
         }
       });
     }
-  
+    
     setCafes(filteredCafes)
+
+    if(filteredCafes.length > 0){
+      setCurrentPage(1)
+    }
+
+    if(!search && rating === 0 && !state && isOpen === 'any'){
+      setCurrentPage(originalCurrentPage)
+    }
   }
 
 

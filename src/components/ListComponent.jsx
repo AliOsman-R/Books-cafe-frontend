@@ -10,6 +10,7 @@ import { CgUnavailable } from 'react-icons/cg';
 const ListComponent = ({ cafe, type, items , filteredItems, setFilteredItems, pageLoading, CardComponent }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(6);
+  const [originalCurrentPage, setOriginalCurrentPage] = useState(1)
   const isEvents = type === 'events'
   const isData = filteredItems.length > 0;
 
@@ -46,7 +47,13 @@ const ListComponent = ({ cafe, type, items , filteredItems, setFilteredItems, pa
       </div>
       <div className="flex flex-grow min-h-[875px]">
         <div className="ssm:hidden md:flex md:flex-col p-[16px]">
-          <Filter items={items} setFilteredItems={setFilteredItems} type={type === 'event'? 'events' : type} />
+          <Filter 
+          items={items} 
+          setFilteredItems={setFilteredItems} 
+          type={type === 'event'? 'events' : type} 
+          setCurrentPage={setCurrentPage} 
+          originalCurrentPage={originalCurrentPage} 
+          />
         </div>
         <div className="flex-1 flex flex-wrap justify-center">
           {isData ? ( 
@@ -74,6 +81,7 @@ const ListComponent = ({ cafe, type, items , filteredItems, setFilteredItems, pa
           setCurrentPage={setCurrentPage}
           recordsPerPage={recordsPerPage}
           setRecordsPerPage={setRecordsPerPage}
+          setOriginalCurrentPage={setOriginalCurrentPage}
           data={filteredItems}
         />
       </div>

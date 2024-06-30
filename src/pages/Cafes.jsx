@@ -18,6 +18,7 @@ const Cafes = () => {
   const [coordinates, setCoordinates] = useState({latitude: 0, longitude: 0})
   const [nearCafes, setnearCafes] = useState(false)
   const [currentPage, setCurrentPage] = useState(1);
+  const [originalCurrentPage, setOriginalCurrentPage] = useState(1)
   const [openFilter, setOpenFilter] = useState(false)
   const [recordsPerPage, setRecordsPerPage] = useState(6);
   const {maxDistance} = useContext(Context)
@@ -112,7 +113,14 @@ const Cafes = () => {
               Filter <FiFilter color="white"/> 
             </button>}
             <div className={`cafe-filter-container ${openFilter ? 'visible' : 'hidden'}`}>
-              <CafeFilter cafes={cafes} setOpenFilter={setOpenFilter} handleClick={handleClick} setCafes={setFilteredCafes} />
+              <CafeFilter 
+              cafes={cafes} 
+              setOpenFilter={setOpenFilter} 
+              handleClick={handleClick} 
+              setCafes={setFilteredCafes} 
+              setCurrentPage={setCurrentPage}
+              originalCurrentPage={originalCurrentPage} 
+              />
             </div>
           </div>
           <div className="flex-1 flex flex-wrap justify-center gap-4">
@@ -134,8 +142,8 @@ const Cafes = () => {
                 </h1>
                 } 
                 {nearCafes && 
-                <div className="text-[40px] font-semibold text-gray-400 flex flex-col gap-2 items-center">
-                  <div className="flex items-center">
+                <div className="text-[40px] font-semibold text-gray-400 flex flex-col justify-center gap-2 items-center">
+                  <div className="flex items-center justify-center">
                     No cafes near to you {" "}
                     <CgUnavailable size={50} className="text-gray-400 mt-2" />
                   </div>
@@ -144,7 +152,7 @@ const Cafes = () => {
               </div>
             )}
           </div>
-          <div className="w-[370px] ">
+          <div className="hidden lg:flex w-[370px] flex-col">
             <Map cafes={filteredCafes}/>
           </div>
         </div>
@@ -155,6 +163,7 @@ const Cafes = () => {
             recordsPerPage={recordsPerPage}
             setRecordsPerPage={setRecordsPerPage}
             data={filteredCafes}
+            setOriginalCurrentPage={setOriginalCurrentPage}
           />
         </div>
       </div>

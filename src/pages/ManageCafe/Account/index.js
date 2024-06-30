@@ -24,7 +24,6 @@ const CafeProfile = () => {
     const isChanged = isCafeInfoChanged(cafeInfo, originalCafeInfo, workingDays)
     const {name, phoneNumber, city, address, bio, latitude, longitude} = cafeInfo
     const cafeDataIsEmpty = {name, phoneNumber, city, address, bio, latitude, longitude}
-    // console.log(cafeInfo)
 
     useEffect(() => {
     httpRequest.get(`/cafe/user-cafe/${user._id}`)
@@ -126,6 +125,10 @@ const CafeProfile = () => {
         if(isAnyFieldEmpty(cafeDataIsEmpty))
         {
             return toast.error('Cafes information must not be empty')
+        }
+
+        if(!cafeInfo.longitude || !cafeInfo.latitude ){
+            return toast.error("longitude and latitude can't be empty ")
         }
 
         const coordinates = []

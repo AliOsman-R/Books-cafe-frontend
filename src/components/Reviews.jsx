@@ -14,7 +14,7 @@ const Reviews = ({ reviews }) => {
             <div className="bg-white dark:bg-gray-100 shadow-md rounded-lg p-4 mb-4">
                 <div className="flex items-center justify-between">
                     <span className="text-gray-800 dark:text-gray-700 text-lg font-semibold">
-                    {review.userId.name || review?.customerName}
+                    {review?.userId?.name || review?.customerName}
                     </span>
                     <div className="flex items-center space-x-2">
                     <StarRating rating={review.rating} />

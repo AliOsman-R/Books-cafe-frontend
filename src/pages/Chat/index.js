@@ -14,6 +14,7 @@ const Chat = () => {
     const areUserChats = userChats.length > 0
     userChats?.sort((a,b) => new Date(b.date).valueOf() - new Date(a.date).valueOf() )
     const isOnline = onlineUsers?.includes(selectedUser?.userId?._id)
+    console.log(selectedUser)
 
     useEffect(() => {
         if(selectedUserId)
@@ -61,9 +62,8 @@ const Chat = () => {
                     <h1 className='font-semibold text-center text-white bg-gray-700 px-4 py-2 '>Slected Chat</h1>
                     {selectedUser && 
                     <div className="flex gap-2 items-center bg-gray-300 p-4 relative">
-                        <span className={` absolute ${isOnline?'bg-green-400 rounded-full size-3 left-[60px] top-3' : ''}`}></span>
+                        <span className={` absolute ${isOnline?'bg-green-400 rounded-full size-3 left-[63px] top-4' : ''}`}></span>
                         <img src={selectedUser?.userId?.profileImage || defaultUserImage} alt="" className="rounded-full h-[65px] w-[65px]"/>
-                        {/* <p className='text-white font-semibold'>{selectedUser?.userId?.name}</p> */}
                         <div className='flex flex-col gap-1 '>
                             <p>{selectedUser?.userId?.name}</p>
                             <p className=' text-sm text-gray-400 max-w-[200px] overflow-hidden'>{selectedUser?.lastMessage}</p>

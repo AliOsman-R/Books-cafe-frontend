@@ -8,7 +8,7 @@ import StarRating from './StarRating';
 import { getDayInfo } from '../utils/AppUtils';
 import { v4 as uuidv4 } from 'uuid';
 
-const Filter = ({items, setFilteredItems, type }) => {
+const Filter = ({items, setFilteredItems, type, setCurrentPage, originalCurrentPage }) => {
   const [rating, setRating] = useState(0);
   const [search, setSearch] = useState('');
   const [selection, setSelection] = useState('All');
@@ -76,8 +76,16 @@ const Filter = ({items, setFilteredItems, type }) => {
         return itemDate >= start && itemDate <= end;
       });
     }
-
     setFilteredItems(filteredItems);
+
+    if(filteredItems.length > 0){
+      setCurrentPage(1)
+    }
+    
+    if(!search && rating === 0 && !isEvent && selection === 'All' && minPrice === '' && maxPrice === '' && status === 'All' && !startDate && !endDate){
+      setCurrentPage(originalCurrentPage)
+    }
+
   };
 
   const options = type === 'books'

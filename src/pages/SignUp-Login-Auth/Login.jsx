@@ -9,6 +9,7 @@ import { BtnLoader } from '../../components/LoaderSpinner';
 import { toast } from 'sonner'
 import { Context } from '../../context/GlobalContext';
 import AuthCard from '../../components/cards/AuthCard';
+import { validateEmail } from '../../utils/validation';
 
 const Login = () => {
   const [loginInfo, setLoginInfo] = useState({email:'', password:''});
@@ -29,6 +30,12 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!validateEmail(loginInfo.email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+    
     setBtnLoading(true)
     httpRequest.post('/auth/login', loginInfo)
       .then(({data}) => {

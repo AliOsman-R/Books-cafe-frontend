@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-const Pagination = ({ currentPage, setCurrentPage, recordsPerPage, setRecordsPerPage, data}) => {
+const Pagination = ({ currentPage, setCurrentPage, recordsPerPage, setRecordsPerPage, data, setOriginalCurrentPage}) => {
   const numberOfPages = Math.ceil(data.length/recordsPerPage)
   let pages = [];
   if (numberOfPages <= 5) {
@@ -35,12 +35,18 @@ const Pagination = ({ currentPage, setCurrentPage, recordsPerPage, setRecordsPer
   const handleClick = (e,n) => {
     window.scrollTo(0, 0);
     const {name} = e.target;
-    if(name === 'prev')
-        setCurrentPage(currentPage - 1)
-    else if (name === 'n')
-        setCurrentPage(n)
-    else
-        setCurrentPage(currentPage + 1)
+    if(name === 'prev'){
+      setCurrentPage(currentPage - 1)
+      setOriginalCurrentPage(currentPage - 1)
+    }
+    else if (name === 'n'){
+      setCurrentPage(n)
+      setOriginalCurrentPage(n)
+    }
+    else{
+      setCurrentPage(currentPage + 1)
+      setOriginalCurrentPage(currentPage + 1)
+    }
   }
 useEffect(() => {
  if(currentPage > pages.length)

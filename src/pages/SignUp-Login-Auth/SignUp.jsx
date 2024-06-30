@@ -25,7 +25,11 @@ const SignUp = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setCredentials({ ...credentials, [name]: value.trim() });
+    if(name === 'name'){
+      setCredentials({ ...credentials, [name]: value });
+    }else{
+      setCredentials({ ...credentials, [name]: value.trim() });
+    }
   };
 
   const handleShowPass = () => {
@@ -46,6 +50,12 @@ const SignUp = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setValidationError("");
+
+    if(credentials.name.trim() === ''){
+      setValidationError("Full name can't be empty.");
+      return;
+    }
+
 
     if (!validateEmail(credentials.email)) {
       setValidationError("Please enter a valid email address.");

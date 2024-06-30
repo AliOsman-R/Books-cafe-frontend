@@ -260,7 +260,7 @@ export const validateExpiry = (expiry) => {
   const expiryYear = parseInt(year);
   // Check if the year is in the future
   if (expiryYear < currentYear || (expiryYear === currentYear && parseInt(month, 10) < currentMonth)) {
-    toast.error('Expiry date must be in the future');
+    toast.error('Expiry date must be valid');
     return false;
   }
 
