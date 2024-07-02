@@ -14,6 +14,7 @@ const EventForm = ({formData, setFormData}) => {
             return EditorState.createEmpty();
         }
     });
+    const formattedDate = formData.date ? formData.date.split('T')[0] : '';
 
     const handleDesChange = (editorState) => {
         setEditorState(editorState);
@@ -80,7 +81,7 @@ const EventForm = ({formData, setFormData}) => {
                         type="date"
                         name="date"
                         className="mt-1 block w-full appearance-none bg-white border border-gray-300 hover:border-gray-500 py-2 px-3 rounded-lg shadow-sm text-sm leading-tight focus:outline-none focus:shadow-outline"
-                        value={formData.date}
+                        value={formattedDate}
                         onChange={handleChange}
                         required
                     />

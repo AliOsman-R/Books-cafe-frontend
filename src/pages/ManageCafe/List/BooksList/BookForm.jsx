@@ -86,7 +86,7 @@ const BookForm = ({formData, setFormData}) => {
                         <option value="Not Available">Not Available</option>
                     </select>
                 </Container>}
-                {isForSelling && <Container labelName='Price ($)'>
+                {isForSelling && <Container labelName='Price (RM)'>
                     <PrimaryInput
                         type="number"
                         name="price"

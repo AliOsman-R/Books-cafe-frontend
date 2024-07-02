@@ -109,10 +109,10 @@ export const isMenuItemDataChanged = (menuItemData, originalMenuItemData) => {
     menuItemData.status !== originalMenuItemData.status ||
     menuItemData.price !== originalMenuItemData.price ||
     menuItemData.ingredients.join(',') !== originalMenuItemData.ingredients.join(',') ||
-    menuItemData.isCountable !== originalMenuItemData.isCountable ||
-    (menuItemData.isCountable && (
-        menuItemData.stock !== originalMenuItemData.stock
-    )) ||
+    // menuItemData.isCountable !== originalMenuItemData.isCountable ||
+    // (menuItemData.isCountable && (
+    menuItemData.stock !== originalMenuItemData.stock ||
+    // ))
     hasImagesChanged(originalMenuItemData.images, menuItemData.images) 
 );
 };

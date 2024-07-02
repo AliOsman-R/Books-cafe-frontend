@@ -130,7 +130,7 @@ const CafeFilter = ({ setOpenFilter, handleClick, cafes, setCafes, setCurrentPag
                 onChange={(e) => setState(e.target.value)}
                 className="p-2 border rounded"
               >
-                <option value="">Select a state</option>
+                <option value="">All</option>
                 {states.map(s => (
                   <option key={s} value={s}>{s}</option>
                 ))}

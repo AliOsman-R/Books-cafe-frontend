@@ -145,7 +145,7 @@ const MenuItemForm = ({formData, setFormData}) => {
                         required
                     />
                 </Container>
-                <Container labelName='Price ($)'>
+                <Container labelName='Price (RM)'>
                     <PrimaryInput
                         type="number"
                         name="price"
