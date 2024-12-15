@@ -5,7 +5,7 @@ import MarkerClusterGroup from "react-leaflet-cluster";
 import { Icon } from 'leaflet';
 
 const Map = ({ cafes }) => {
-  const center = [3.1582811161591784, 101.7122779878382]
+  const center = [25.289286346900763, 51.52435626951857]
   const centers = cafes.length === 1? [cafes[0].coordinates[1], cafes[0].coordinates[0]] : center
 
   const customIcon = new Icon({
