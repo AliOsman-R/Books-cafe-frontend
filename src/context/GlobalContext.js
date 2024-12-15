@@ -23,6 +23,7 @@ export default function GlobalContext() {
   const [socket, setSocket] = useState(null);
 	const [onlineUsers, setOnlineUsers] = useState([]);
   const [userChats, setUserChats] = useState([])
+  const serverUrl = process.env.REACT_APP_NODE_ENV === 'dev' ? 'http://localhost:5000' : 'https://books-cafe-backend.vercel.app'
 
   const actions = (action) => {
     const { type, payload } = action;
@@ -121,7 +122,7 @@ export default function GlobalContext() {
 
   useEffect(() => {
 		if (user) {
-			const socket = io("http://localhost:5000", {
+			const socket = io(serverUrl, {
 				query: {
 					userId: user._id,
 				},
