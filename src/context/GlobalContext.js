@@ -24,6 +24,8 @@ export default function GlobalContext() {
 	const [onlineUsers, setOnlineUsers] = useState([]);
   const [userChats, setUserChats] = useState([])
   const serverUrl = process.env.REACT_APP_NODE_ENV === 'dev' ? 'http://localhost:5000' : 'https://books-cafe-backend.vercel.app'
+  console.log(process.env.REACT_APP_NODE_ENV)
+  
 
   const actions = (action) => {
     const { type, payload } = action;
@@ -121,23 +123,25 @@ export default function GlobalContext() {
   }, []);
 
   useEffect(() => {
+    console.log(user)
 		if (user) {
-			const socket = io(serverUrl, {
-				query: {
-					userId: user._id,
+      const socketObj = io(serverUrl, {
+        query: {
+          userId: user._id,
 				},
 			});
+      
+      console.log("socket connected")
+			setSocket(socketObj);
 
-			setSocket(socket);
-
-			socket.on("getOnlineUsers", (users) => {
+			socketObj.on("getOnlineUsers", (users) => {
 				setOnlineUsers(users);
 			});
 
-			return () => socket.close();
+			return () => socketObj.close();
 		} else {
 			if (socket) {
-				socket.close();
+				socket?.close();
 				setSocket(null);
 			}
 		}
